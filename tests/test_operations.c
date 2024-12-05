@@ -225,6 +225,73 @@ void test_edge_cases() {
     printf("Edge case tests passed!\n");
 }
 
+void test_logarithm_comprehensive() {
+    printf("Testing comprehensive logarithm cases...\n");
+    
+    // Test powers of 2
+    ArbitraryInt *base = create_arbitrary_int("2");
+    ArbitraryInt *nums[] = {
+        create_arbitrary_int("2"),
+        create_arbitrary_int("4"),
+        create_arbitrary_int("8"),
+        create_arbitrary_int("16"),
+        create_arbitrary_int("32")
+    };
+    
+    for(int i = 0; i < 5; i++) {
+        ArbitraryInt *result = logarithm(nums[i], base);
+        char expected[2];
+        sprintf(expected, "%d", i + 1);
+        assert(strcmp(result->value, expected) == 0);
+        free_arbitrary_int(result);
+    }
+    
+    free_arbitrary_int(base);
+    for(int i = 0; i < 5; i++) {
+        free_arbitrary_int(nums[i]);
+    }
+    
+    // Test powers of 10
+    base = create_arbitrary_int("10");
+    ArbitraryInt *num = create_arbitrary_int("1000000");
+    ArbitraryInt *result = logarithm(num, base);
+    assert(strcmp(result->value, "6") == 0);
+    
+    free_arbitrary_int(base);
+    free_arbitrary_int(num);
+    free_arbitrary_int(result);
+    
+    printf("Comprehensive logarithm tests passed!\n");
+}
+
+void test_logarithm_errors() {
+    printf("Testing logarithm error cases...\n");
+    
+    // Test negative number
+    ArbitraryInt *base = create_arbitrary_int("2");
+    ArbitraryInt *num = create_arbitrary_int("-8");
+    ArbitraryInt *result = logarithm(num, base);
+    assert(result == NULL);
+    
+    // Test zero
+    free_arbitrary_int(num);
+    num = create_arbitrary_int("0");
+    result = logarithm(num, base);
+    assert(result == NULL);
+    
+    // Test base 1
+    free_arbitrary_int(base);
+    base = create_arbitrary_int("1");
+    num = create_arbitrary_int("10");
+    result = logarithm(num, base);
+    assert(result == NULL);
+    
+    free_arbitrary_int(base);
+    free_arbitrary_int(num);
+    
+    printf("Logarithm error case tests passed!\n");
+}
+
 int main() {
     printf("Starting tests...\n\n");
     
@@ -234,6 +301,8 @@ int main() {
     test_factorial();
     test_logarithm();
     test_edge_cases();
+    test_logarithm_comprehensive();
+    test_logarithm_errors();
     
     printf("\nAll tests passed successfully!\n");
     return 0;

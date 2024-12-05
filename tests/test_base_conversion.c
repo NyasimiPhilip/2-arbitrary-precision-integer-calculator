@@ -84,6 +84,54 @@ void test_invalid_inputs() {
     printf("Invalid input tests passed!\n");
 }
 
+void test_arbitrary_bases() {
+    printf("Testing arbitrary base conversions...\n");
+    
+    // Test base 3
+    ArbitraryInt *num = create_arbitrary_int("15");
+    char *base3 = to_base(num, 3);
+    assert(strcmp(base3, "120") == 0);
+    free(base3);
+    free_arbitrary_int(num);
+    
+    // Test base 36 (max)
+    num = create_arbitrary_int("123456789");
+    char *base36 = to_base(num, 36);
+    assert(strcmp(base36, "21I3V9") == 0);
+    free(base36);
+    free_arbitrary_int(num);
+    
+    // Test negative numbers
+    num = create_arbitrary_int("-42");
+    char *base2 = to_base(num, 2);
+    assert(strcmp(base2, "-101010") == 0);
+    free(base2);
+    free_arbitrary_int(num);
+    
+    printf("Arbitrary base conversion tests passed!\n");
+}
+
+void test_base_roundtrip() {
+    printf("Testing base conversion roundtrip...\n");
+    
+    // Convert to base N and back to decimal
+    const char *original = "123456789";
+    ArbitraryInt *num = create_arbitrary_int(original);
+    
+    // Test with different bases
+    int bases[] = {2, 8, 16, 36};
+    for(int i = 0; i < sizeof(bases)/sizeof(bases[0]); i++) {
+        char *converted = to_base(num, bases[i]);
+        ArbitraryInt *back = from_base(converted, bases[i]);
+        assert(strcmp(back->value, original) == 0);
+        free(converted);
+        free_arbitrary_int(back);
+    }
+    
+    free_arbitrary_int(num);
+    printf("Base conversion roundtrip tests passed!\n");
+}
+
 int main() {
     printf("Starting base conversion tests...\n\n");
     
@@ -92,6 +140,8 @@ int main() {
     test_from_binary();
     test_from_hex();
     test_invalid_inputs();
+    test_arbitrary_bases();
+    test_base_roundtrip();
     
     printf("\nAll base conversion tests passed successfully!\n");
     return 0;
