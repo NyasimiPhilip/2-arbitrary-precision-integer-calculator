@@ -108,3 +108,44 @@ ArbitraryInt* copy_arbitrary_int(const ArbitraryInt *num) {
     copy->is_negative = num->is_negative;
     return copy;
 }
+
+ArbitraryInt* logarithm(const ArbitraryInt *num, const ArbitraryInt *base) {
+    if(base->is_negative || num->is_negative) {
+        fprintf(stderr, "Logarithm not defined for negative numbers\n");
+        return NULL;
+    }
+    
+    if(strcmp(base->value, "1") == 0 || strcmp(base->value, "0") == 0) {
+        fprintf(stderr, "Invalid base for logarithm\n");
+        return NULL;
+    }
+    
+    if(strcmp(num->value, "0") == 0) {
+        fprintf(stderr, "Logarithm not defined for zero\n");
+        return NULL;
+    }
+    
+    // Initialize result
+    ArbitraryInt *result = create_arbitrary_int("0");
+    ArbitraryInt *current = create_arbitrary_int("1");
+    
+    // While current <= num
+    while(compare_arbitrary_ints(current, num) <= 0) {
+        // Multiply current by base
+        ArbitraryInt *next = multiply(current, base);
+        free_arbitrary_int(current);
+        current = next;
+        
+        // Increment result
+        ArbitraryInt *new_result = add(result, create_arbitrary_int("1"));
+        free_arbitrary_int(result);
+        result = new_result;
+    }
+    
+    // Adjust result since we went one step too far
+    ArbitraryInt *final = subtract(result, create_arbitrary_int("1"));
+    free_arbitrary_int(result);
+    free_arbitrary_int(current);
+    
+    return final;
+}
