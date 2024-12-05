@@ -59,32 +59,59 @@ void test_basic_arithmetic() {
 }
 
 void test_division_and_modulo() {
-    ArbitraryInt *a, *b, *quotient, *remainder;
-    
     printf("Testing division and modulo...\n");
     
     // Basic division
-    a = create_arbitrary_int("1000");
-    b = create_arbitrary_int("3");
-    quotient = divide(a, b, &remainder);
+    ArbitraryInt *a = create_arbitrary_int("1000");
+    ArbitraryInt *b = create_arbitrary_int("3");
+    ArbitraryInt *remainder = NULL;
+    ArbitraryInt *quotient = divide(a, b, &remainder);
     assert(strcmp(quotient->value, "333") == 0);
     assert(strcmp(remainder->value, "1") == 0);
     free_arbitrary_int(quotient);
     free_arbitrary_int(remainder);
     
-    // Division by zero
+    // Test division by zero cases
+    printf("Testing division by zero cases...\n");
+    
+    // Case 1: 1/0 (Positive Infinity)
+    free_arbitrary_int(a);
+    free_arbitrary_int(b);
+    a = create_arbitrary_int("1");
     b = create_arbitrary_int("0");
     quotient = divide(a, b, &remainder);
-    assert(quotient == NULL);
+    assert(quotient == NULL); // Should return NULL for infinity
+    
+    // Case 2: -1/0 (Negative Infinity)
+    free_arbitrary_int(a);
+    a = create_arbitrary_int("-1");
+    quotient = divide(a, b, &remainder);
+    assert(quotient == NULL); // Should return NULL for -infinity
+    
+    // Case 3: 0/0 (NaN)
+    free_arbitrary_int(a);
+    a = create_arbitrary_int("0");
+    quotient = divide(a, b, &remainder);
+    assert(quotient == NULL); // Should return NULL for NaN
+    
+    // Test modulo operations
+    printf("Testing modulo operations...\n");
     free_arbitrary_int(a);
     free_arbitrary_int(b);
     
-    // Modulo tests
-    a = create_arbitrary_int("123456789");
-    b = create_arbitrary_int("1000");
-    ArbitraryInt *mod = modulo(a, b);
-    assert(strcmp(mod->value, "789") == 0);
-    free_arbitrary_int(mod);
+    a = create_arbitrary_int("7");
+    b = create_arbitrary_int("3");
+    ArbitraryInt *mod_result = modulo(a, b);
+    assert(strcmp(mod_result->value, "1") == 0);
+    free_arbitrary_int(mod_result);
+    
+    // Test large number modulo
+    free_arbitrary_int(a);
+    a = create_arbitrary_int("1000000");
+    mod_result = modulo(a, b);
+    assert(strcmp(mod_result->value, "1") == 0);
+    free_arbitrary_int(mod_result);
+    
     free_arbitrary_int(a);
     free_arbitrary_int(b);
     

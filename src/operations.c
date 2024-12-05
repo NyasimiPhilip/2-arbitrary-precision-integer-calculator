@@ -17,8 +17,16 @@ ArbitraryInt* multiply(const ArbitraryInt *a, const ArbitraryInt *b) {
 
 ArbitraryInt* divide(const ArbitraryInt *a, const ArbitraryInt *b, ArbitraryInt **remainder) {
     if(strcmp(b->value, "0") == 0) {
-        fprintf(stderr, "Division by zero\n");
-        return NULL;
+        if(strcmp(a->value, "0") == 0) {
+            // 0/0 = NaN
+            fprintf(stderr, "Division by zero (NaN)\n");
+            return NULL;
+        } else {
+            // x/0 = ±Infinity
+            fprintf(stderr, "Division by zero (%sInfinity)\n", 
+                   a->is_negative ? "-" : "");
+            return NULL;
+        }
     }
 
     ArbitraryInt *quotient = create_arbitrary_int("0");

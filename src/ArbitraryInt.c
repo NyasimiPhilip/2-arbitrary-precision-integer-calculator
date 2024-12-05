@@ -66,11 +66,22 @@ int compare_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b) {
         return a->is_negative ? -1 : 1;
     }
 
-    int cmp = strcmp(a->value, b->value);
-    if(a->is_negative) {
-        return -cmp; // Reverse comparison for negative numbers
+    // Both are positive or both are negative
+    int sign_multiplier = a->is_negative ? -1 : 1;
+
+    size_t len_a = strlen(a->value);
+    size_t len_b = strlen(b->value);
+
+    if(len_a > len_b) {
+        return 1 * sign_multiplier;
     }
-    return cmp;
+    if(len_a < len_b) {
+        return -1 * sign_multiplier;
+    }
+
+    // If lengths are equal, perform lexicographical comparison
+    int cmp = strcmp(a->value, b->value);
+    return cmp * sign_multiplier;
 }
 
 // Print ArbitraryInt

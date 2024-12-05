@@ -50,6 +50,12 @@ cmake --build .
 
 # Run tests
 ctest
+
+# Build with configuration
+cmake --build . --config Release
+
+# Run tests with configuration
+ctest -C Release
 ```
 
 ### Option 2: Manual Compilation
