@@ -9,61 +9,6 @@
 
 #define MAX_INPUT 1024
 
-// Helper function to parse fractions
-Fraction* parse_fraction(const char* str) {
-    char *copy = strdup(str);
-    char *numerator = strtok(copy, "/");
-    char *denominator = strtok(NULL, "/");
-    
-    if(!numerator || !denominator) {
-        free(copy);
-        return NULL;
-    }
-    
-    ArbitraryInt *num = create_arbitrary_int(numerator);
-    ArbitraryInt *den = create_arbitrary_int(denominator);
-    free(copy);
-    
-    if(!num || !den) return NULL;
-    
-    Fraction *result = create_fraction(num, den);
-    free_arbitrary_int(num);
-    free_arbitrary_int(den);
-    return result;
-}
-
-// Helper function to parse logarithm input (e.g., "log2(8)")
-void parse_logarithm(const char* str, char** base_str, char** num_str) {
-    // Format: log<base>(<num>)
-    char *copy = strdup(str);
-    *base_str = NULL;
-    *num_str = NULL;
-    
-    // Skip "log"
-    char *ptr = copy + 3;
-    char *end = strchr(ptr, '(');
-    if(!end) {
-        free(copy);
-        return;
-    }
-    
-    *end = '\0';
-    *base_str = strdup(ptr);
-    
-    ptr = end + 1;
-    end = strchr(ptr, ')');
-    if(!end) {
-        free(*base_str);
-        *base_str = NULL;
-        free(copy);
-        return;
-    }
-    
-    *end = '\0';
-    *num_str = strdup(ptr);
-    
-    free(copy);
-}
 
 void print_help() {
     printf("\nArbitrary Precision Calculator\n");

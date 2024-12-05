@@ -14,6 +14,7 @@ add_library(calculator_lib
     src/base_conversion.c
     src/fraction.c
     src/operations.c
+    src/parser.c 
 )
 
 # Create main executable

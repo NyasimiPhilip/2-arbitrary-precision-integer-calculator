@@ -9,7 +9,7 @@ static char* remove_leading_zeros(const char *str) {
     while(*str == '0' && *(str+1) != '\0') {
         str++;
     }
-    return strdup(str);
+    return _strdup(str);
 }
 
 // Factory function to create ArbitraryInt from string
@@ -34,7 +34,12 @@ ArbitraryInt* create_arbitrary_int(const char *str) {
 
     // Validate digits
     size_t len = strlen(str);
-    for(size_t i = 0; i < len; i++) {
+    if (len > INT_MAX) {
+        // Handle error case
+        return NULL;
+    }
+    int size = (int)len;
+    for(size_t i = 0; i < size; i++) {
         if(!isdigit(str[i])) {
             fprintf(stderr, "Invalid number: %s\n", str);
             free(num);

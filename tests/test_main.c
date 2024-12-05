@@ -2,14 +2,16 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include "../include/operations.h"
-#include "../include/fraction.h"
-#include "../include/base_conversion.h"
+#include "operations.h"
+#include "fraction.h"
+#include "base_conversion.h"
+#include "parser.h"
 
 void test_parse_fraction() {
     printf("Testing fraction parsing...\n");
     
     Fraction *frac = parse_fraction("1/2");
+    assert(frac != NULL);
     assert(strcmp(frac->numerator->value, "1") == 0);
     assert(strcmp(frac->denominator->value, "2") == 0);
     free_fraction(frac);

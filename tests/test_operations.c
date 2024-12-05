@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "../src/operations.h"
+#include "../include/operations.h"
 
 void test_basic_arithmetic() {
     ArbitraryInt *a, *b, *result;
