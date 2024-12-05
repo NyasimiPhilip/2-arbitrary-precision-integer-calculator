@@ -1,6 +1,7 @@
-#include "operations.h"
+#include "../include/operations.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 ArbitraryInt* add(const ArbitraryInt *a, const ArbitraryInt *b) {
     return add_arbitrary_ints(a, b);

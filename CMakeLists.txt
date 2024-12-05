@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 3.10)
+project(arbitrary_precision_calculator C)
+
+# Set C standard
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+# Add include directory
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+# Create library from source files
+add_library(calculator_lib
+    src/ArbitraryInt.c
+    src/base_conversion.c
+    src/fraction.c
+    src/operations.c
+)
+
+# Create main executable
+add_executable(calculator src/main.c)
+target_link_libraries(calculator calculator_lib)
+
+# Testing
+enable_testing()
+add_subdirectory(tests) 
