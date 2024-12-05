@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\HP User\Desktop\c\build\CMakeFiles\bf6f3421d1e00c92b128e8ab03c1c61b\RUN_TESTS_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{346459E6-8BD7-3278-BE29-D47C08F554BB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

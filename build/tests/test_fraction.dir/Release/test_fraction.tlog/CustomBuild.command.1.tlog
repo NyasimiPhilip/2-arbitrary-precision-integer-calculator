@@ -1,0 +1,10 @@
+^C:\USERS\HP USER\DESKTOP\C\TESTS\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/HP User/Desktop/c" "-BC:/Users/HP User/Desktop/c/build" --check-stamp-file "C:/Users/HP User/Desktop/c/build/tests/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
