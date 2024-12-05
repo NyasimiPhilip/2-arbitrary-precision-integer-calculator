@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include "../src/operations.h"
-#include "../src/fraction.h"
-#include "../src/base_conversion.h"
+#include "../include/operations.h"
+#include "../include/fraction.h"
+#include "../include/base_conversion.h"
 
 void test_parse_fraction() {
     printf("Testing fraction parsing...\n");

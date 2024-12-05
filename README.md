@@ -15,12 +15,13 @@ The calculator uses a string-based representation for arbitrary precision intege
 ## Building the Project
 
 ### Prerequisites
-- CMake 3.10 or higher
-- C compiler (GCC or compatible)
+- CMake 3.10 or higher (for CMake build)
+- C compiler (GCC/MinGW for Windows, GCC/Clang for Unix)
 - Standard C library
 
-### Building with CMake
+### Option 1: Using CMake
 
+#### Unix/Linux/Mac:
 ```bash
 # Create build directory
 mkdir build && cd build
@@ -35,10 +36,110 @@ cmake --build .
 ctest
 ```
 
+#### Windows (PowerShell):
+```powershell
+# Create and enter build directory
+mkdir build
+cd build
+
+# Generate build files
+cmake ..
+
+# Build the project
+cmake --build .
+
+# Run tests
+ctest
+```
+
+### Option 2: Manual Compilation
+
+#### Unix/Linux/Mac:
+```bash
+# Compile library
+gcc -c src/*.c -I./include
+
+# Create static library
+ar rcs libcalculator.a *.o
+
+# Compile and link main program
+gcc src/main.c -L. -lcalculator -I./include -o calculator
+
+# Compile tests
+gcc tests/test_arbitraryint.c -L. -lcalculator -I./include -o test_arbitraryint
+gcc tests/test_base_conversion.c -L. -lcalculator -I./include -o test_base_conversion
+gcc tests/test_fraction.c -L. -lcalculator -I./include -o test_fraction
+gcc tests/test_operations.c -L. -lcalculator -I./include -o test_operations
+
+# Run tests
+./test_arbitraryint
+./test_base_conversion
+./test_fraction
+./test_operations
+```
+
+#### Windows (MinGW):
+```powershell
+# Compile library
+gcc -c src/*.c -I./include
+
+# Create static library
+ar rcs libcalculator.a *.o
+
+# Compile and link main program
+gcc src/main.c -L. -lcalculator -I./include -o calculator.exe
+
+# Compile tests
+gcc tests/test_arbitraryint.c -L. -lcalculator -I./include -o test_arbitraryint.exe
+gcc tests/test_base_conversion.c -L. -lcalculator -I./include -o test_base_conversion.exe
+gcc tests/test_fraction.c -L. -lcalculator -I./include -o test_fraction.exe
+gcc tests/test_operations.c -L. -lcalculator -I./include -o test_operations.exe
+
+# Run tests
+./test_arbitraryint.exe
+./test_base_conversion.exe
+./test_fraction.exe
+./test_operations.exe
+```
+
+### Option 3: Using Make
+
+#### Unix/Linux/Mac:
+```bash
+# Build everything
+make
+
+# Run tests
+make test
+
+# Clean build files
+make clean
+```
+
+#### Windows (MinGW):
+```powershell
+# Build everything
+mingw32-make
+
+# Run tests
+mingw32-make test
+
+# Clean build files
+mingw32-make clean
+```
+
 ### Running the Calculator
+
+#### Unix/Linux/Mac:
 ```bash
 # From the build directory
 ./calculator
+```
+
+#### Windows:
+```powershell
+# From the build directory
+.\calculator.exe
 ```
 
 ## Usage Examples

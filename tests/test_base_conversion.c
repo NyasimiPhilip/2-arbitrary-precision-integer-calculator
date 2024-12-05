@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "../src/base_conversion.h"
-#include "../src/ArbitraryInt.h"
+#include "../include/base_conversion.h"
+#include "../include/ArbitraryInt.h"
 
 void test_decimal_to_binary() {
     printf("Testing decimal to binary conversion...\n");

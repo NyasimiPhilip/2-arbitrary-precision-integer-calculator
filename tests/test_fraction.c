@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "../src/fraction.h"
+#include "../include/fraction.h"
 
 void test_fraction_creation() {
     printf("Testing fraction creation...\n");

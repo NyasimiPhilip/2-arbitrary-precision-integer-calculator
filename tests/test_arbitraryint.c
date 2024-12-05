@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "../src/ArbitraryInt.h"
+#include "../include/ArbitraryInt.h"
 
 void test_creation() {
     printf("Testing ArbitraryInt creation...\n");
