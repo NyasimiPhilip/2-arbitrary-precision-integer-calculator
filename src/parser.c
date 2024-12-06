@@ -1,28 +1,24 @@
 #include "parser.h"
 #include "fraction.h"
-#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Fraction* parse_fraction(const char* str) {
-    if (str == NULL) return NULL;
+    if (!str) return NULL;
     
     char* slash = strchr(str, '/');
-    if (slash == NULL) return NULL;
-    
-    // Add debug print
-    printf("Debug: Parsing fraction: %s\n", str);
+    if (!slash) return NULL;
     
     // Split the string at the slash
     size_t num_len = slash - str;
     char* num_str = (char*)malloc(num_len + 1);
-    if (!num_str) {
-        printf("Debug: Memory allocation failed for numerator\n");
-        return NULL;
-    }
+    if (!num_str) return NULL;
+    
     strncpy(num_str, str, num_len);
     num_str[num_len] = '\0';
     
-    // Get denominator string
+    // Get denominator string (skip the slash)
     const char* den_str = slash + 1;
     
     // Create ArbitraryInts
@@ -32,13 +28,18 @@ Fraction* parse_fraction(const char* str) {
     free(num_str);
     
     if (!num || !den) {
-        printf("Debug: Failed to create ArbitraryInt\n");
         free_arbitrary_int(num);
         free_arbitrary_int(den);
         return NULL;
     }
     
-    return create_fraction(num, den);
+    // Create and return the fraction
+    Fraction* result = create_fraction(num, den);
+    
+    free_arbitrary_int(num);
+    free_arbitrary_int(den);
+    
+    return result;
 }
 
 void parse_logarithm(const char* str, char** base_str, char** num_str) {

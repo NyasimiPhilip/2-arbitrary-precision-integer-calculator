@@ -86,6 +86,7 @@ int main() {
             ArbitraryInt *result = from_base(num_str, base);
             if(result) {
                 print_arbitrary_int(result);
+                printf("\n");
                 free_arbitrary_int(result);
             }
             continue;
@@ -159,16 +160,21 @@ int main() {
             }
             
             Fraction *result = NULL;
-            if(*op == '+') {
-                result = add_fractions(f1, f2);
-            } else if(*op == '*') {
-                result = multiply_fractions(f1, f2);
-            } else if(*op == '-') {
-                result = subtract_fractions(f1, f2);
-            } else if(*op == '/') {
-                result = divide_fractions(f1, f2);
-            } else {
-                printf("Unsupported fraction operation\n");
+            switch(*op) {
+                case '+':
+                    result = add_fractions(f1, f2);
+                    break;
+                case '*':
+                    result = multiply_fractions(f1, f2);
+                    break;
+                case '-':
+                    result = subtract_fractions(f1, f2);
+                    break;
+                case '/':
+                    result = divide_fractions(f1, f2);
+                    break;
+                default:
+                    printf("Unsupported fraction operation\n");
             }
             
             if(result) {
