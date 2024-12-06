@@ -154,6 +154,7 @@ mingw32-make clean
 1219253925
 > 1000000 / 3
 333333
+Remainder: 1
 ```
 
 ### Base Conversion

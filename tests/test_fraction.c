@@ -153,6 +153,33 @@ void test_fraction_operations() {
     printf("Complex fraction operations tests passed!\n");
 }
 
+void test_fraction_signs() {
+    printf("Testing fraction sign handling...\n");
+    
+    // Test negative numerator
+    ArbitraryInt *num1 = create_arbitrary_int("-1");
+    ArbitraryInt *den1 = create_arbitrary_int("2");
+    Fraction *f1 = create_fraction(num1, den1);
+    
+    // Test negative denominator
+    ArbitraryInt *num2 = create_arbitrary_int("1");
+    ArbitraryInt *den2 = create_arbitrary_int("-3");
+    Fraction *f2 = create_fraction(num2, den2);
+    
+    Fraction *sum = add_fractions(f1, f2);
+    assert(sum->numerator->is_negative);  // Result should be negative
+    
+    free_fraction(f1);
+    free_fraction(f2);
+    free_fraction(sum);
+    free_arbitrary_int(num1);
+    free_arbitrary_int(den1);
+    free_arbitrary_int(num2);
+    free_arbitrary_int(den2);
+    
+    printf("Fraction sign handling tests passed!\n");
+}
+
 int main() {
     printf("Starting fraction tests...\n\n");
     
@@ -161,6 +188,7 @@ int main() {
     test_fraction_multiplication();
     test_fraction_edge_cases();
     test_fraction_operations();
+    test_fraction_signs();
     
     printf("\nAll fraction tests passed successfully!\n");
     return 0;
