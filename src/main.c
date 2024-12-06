@@ -107,6 +107,7 @@ int main() {
             
             if(result) {
                 print_arbitrary_int(result);
+                printf("\n");
                 free_arbitrary_int(result);
             }
             
@@ -130,6 +131,7 @@ int main() {
             
             if(result) {
                 print_arbitrary_int(result);
+                printf("\n");
                 free_arbitrary_int(result);
             }
             
@@ -174,13 +176,15 @@ int main() {
                     result = divide_fractions(f1, f2);
                     break;
                 default:
-                    printf("Unsupported fraction operation\n");
+                    printf("Unsupported fraction operation: %c\n", *op);
             }
             
             if(result) {
                 print_fraction(result);
                 printf("\n");
                 free_fraction(result);
+            } else {
+                printf("Error performing fraction operation\n");
             }
             
             free_fraction(f1);

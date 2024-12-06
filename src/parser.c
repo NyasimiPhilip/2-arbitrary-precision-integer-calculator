@@ -7,25 +7,27 @@
 Fraction* parse_fraction(const char* str) {
     if (!str) return NULL;
     
-    char* slash = strchr(str, '/');
-    if (!slash) return NULL;
+    // Make a copy of the input string
+    char* input = strdup(str);
+    if (!input) return NULL;
     
-    // Split the string at the slash
-    size_t num_len = slash - str;
-    char* num_str = (char*)malloc(num_len + 1);
-    if (!num_str) return NULL;
+    // Find the division symbol
+    char* slash = strchr(input, '/');
+    if (!slash) {
+        free(input);
+        return NULL;
+    }
     
-    strncpy(num_str, str, num_len);
-    num_str[num_len] = '\0';
+    // Split the string
+    *slash = '\0';
+    char* num_str = input;
+    char* den_str = slash + 1;
     
-    // Get denominator string (skip the slash)
-    const char* den_str = slash + 1;
-    
-    // Create ArbitraryInts
+    // Create the ArbitraryInts
     ArbitraryInt* num = create_arbitrary_int(num_str);
     ArbitraryInt* den = create_arbitrary_int(den_str);
     
-    free(num_str);
+    free(input);
     
     if (!num || !den) {
         free_arbitrary_int(num);
@@ -33,7 +35,7 @@ Fraction* parse_fraction(const char* str) {
         return NULL;
     }
     
-    // Create and return the fraction
+    // Create the fraction
     Fraction* result = create_fraction(num, den);
     
     free_arbitrary_int(num);
