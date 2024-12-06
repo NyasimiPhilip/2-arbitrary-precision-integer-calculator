@@ -5,38 +5,46 @@
 #include <string.h>
 
 Fraction* parse_fraction(const char* str) {
-    if (!str) return NULL;
+    printf("DEBUG: Starting parse_fraction with input: %s\n", str);
+    if (!str) {
+        printf("DEBUG: Input string is NULL\n");
+        return NULL;
+    }
     
-    // Make a copy of the input string
     char* input = strdup(str);
-    if (!input) return NULL;
+    printf("DEBUG: Copied input string: %s\n", input);
+    if (!input) {
+        printf("DEBUG: Failed to allocate memory for input copy\n");
+        return NULL;
+    }
     
-    // Find the division symbol
     char* slash = strchr(input, '/');
     if (!slash) {
+        printf("DEBUG: No slash found in input\n");
         free(input);
         return NULL;
     }
     
-    // Split the string
     *slash = '\0';
     char* num_str = input;
     char* den_str = slash + 1;
+    printf("DEBUG: Split into numerator: %s, denominator: %s\n", num_str, den_str);
     
-    // Create the ArbitraryInts
     ArbitraryInt* num = create_arbitrary_int(num_str);
     ArbitraryInt* den = create_arbitrary_int(den_str);
+    printf("DEBUG: Created ArbitraryInts - num: %p, den: %p\n", (void*)num, (void*)den);
     
     free(input);
     
     if (!num || !den) {
+        printf("DEBUG: Failed to create ArbitraryInts\n");
         free_arbitrary_int(num);
         free_arbitrary_int(den);
         return NULL;
     }
     
-    // Create the fraction
     Fraction* result = create_fraction(num, den);
+    printf("DEBUG: Created fraction: %p\n", (void*)result);
     
     free_arbitrary_int(num);
     free_arbitrary_int(den);

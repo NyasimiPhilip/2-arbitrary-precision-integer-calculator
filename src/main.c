@@ -151,28 +151,43 @@ int main() {
         
         // Check for fractions
         if(strchr(first, '/') && strchr(second, '/')) {
+            printf("DEBUG: Detected fraction operation: %s %c %s\n", first, *op, second);
             Fraction *f1 = parse_fraction(first);
             Fraction *f2 = parse_fraction(second);
             
             if(!f1 || !f2) {
+                printf("DEBUG: Failed to parse one or both fractions\n");
                 printf("Invalid fraction format\n");
                 free_fraction(f1);
                 free_fraction(f2);
                 continue;
             }
             
+            printf("DEBUG: Successfully parsed fractions\n");
+            printf("DEBUG: First fraction: ");
+            print_fraction(f1);
+            printf("\n");
+            printf("DEBUG: Second fraction: ");
+            print_fraction(f2);
+            printf("\n");
+            
             Fraction *result = NULL;
             switch(*op) {
                 case '+':
+                    printf("DEBUG: Starting addition operation\n");
                     result = add_fractions(f1, f2);
+                    printf("DEBUG: Addition operation completed\n");
                     break;
                 case '*':
+                    printf("DEBUG: Performing multiplication\n");
                     result = multiply_fractions(f1, f2);
                     break;
                 case '-':
+                    printf("DEBUG: Performing subtraction\n");
                     result = subtract_fractions(f1, f2);
                     break;
                 case '/':
+                    printf("DEBUG: Performing division\n");
                     result = divide_fractions(f1, f2);
                     break;
                 default:
@@ -180,13 +195,18 @@ int main() {
             }
             
             if(result) {
+                printf("DEBUG: Printing result\n");
+                printf("Result: ");
                 print_fraction(result);
                 printf("\n");
+                printf("DEBUG: Freeing result\n");
                 free_fraction(result);
             } else {
+                printf("DEBUG: Addition operation failed\n");
                 printf("Error performing fraction operation\n");
             }
             
+            printf("DEBUG: Cleaning up input fractions\n");
             free_fraction(f1);
             free_fraction(f2);
             continue;
