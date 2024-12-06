@@ -9,9 +9,16 @@ Fraction* parse_fraction(const char* str) {
     char* slash = strchr(str, '/');
     if (slash == NULL) return NULL;
     
+    // Add debug print
+    printf("Debug: Parsing fraction: %s\n", str);
+    
     // Split the string at the slash
     size_t num_len = slash - str;
     char* num_str = (char*)malloc(num_len + 1);
+    if (!num_str) {
+        printf("Debug: Memory allocation failed for numerator\n");
+        return NULL;
+    }
     strncpy(num_str, str, num_len);
     num_str[num_len] = '\0';
     
@@ -25,6 +32,7 @@ Fraction* parse_fraction(const char* str) {
     free(num_str);
     
     if (!num || !den) {
+        printf("Debug: Failed to create ArbitraryInt\n");
         free_arbitrary_int(num);
         free_arbitrary_int(den);
         return NULL;

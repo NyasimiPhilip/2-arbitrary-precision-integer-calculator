@@ -2,19 +2,18 @@
 #define FRACTION_H
 
 #include "ArbitraryInt.h"
+#include <stdbool.h>
 
 typedef struct {
     ArbitraryInt *numerator;
     ArbitraryInt *denominator;
 } Fraction;
 
-// Constructor
+// Constructor and destructor
 Fraction* create_fraction(const ArbitraryInt *numerator, const ArbitraryInt *denominator);
-
-// Destructor
 void free_fraction(Fraction *frac);
 
-// Fraction Operations
+// Operations
 Fraction* add_fractions(const Fraction *a, const Fraction *b);
 Fraction* subtract_fractions(const Fraction *a, const Fraction *b);
 Fraction* multiply_fractions(const Fraction *a, const Fraction *b);

@@ -86,10 +86,19 @@ int compare_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b) {
 
 // Print ArbitraryInt
 void print_arbitrary_int(const ArbitraryInt *num) {
-    if(num->is_negative && strcmp(num->value, "0") != 0) {
+    if (!num) {
+        printf("NULL");
+        return;
+    }
+    if (!num->value) {
+        printf("Invalid");
+        return;
+    }
+    
+    if (num->is_negative) {
         printf("-");
     }
-    printf("%s\n", num->value);
+    printf("%s", num->value);
 }
 
 // Helper function to reverse a string in place

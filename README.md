@@ -30,10 +30,10 @@ mkdir build && cd build
 cmake ..
 
 # Build the project
-cmake --build .
+cmake --build . --config Release
 
 # Run tests
-ctest
+ctest -C Release
 ```
 
 #### Windows (PowerShell):
@@ -44,12 +44,6 @@ cd build
 
 # Generate build files
 cmake ..
-
-# Build the project
-cmake --build .
-
-# Run tests
-ctest
 
 # Build with configuration
 cmake --build . --config Release
@@ -178,11 +172,15 @@ FF
 5/6
 > 2/3 * 3/4
 1/2
+> 1/6 ÷ 1/3
+1/2
+> 1/2 - 1/3
+1/6
 ```
 
 ### Advanced Operations
 ```
-> 2^10
+> 2 ^ 10
 1024
 > 5!
 120

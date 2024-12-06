@@ -6,6 +6,7 @@
 #include "operations.h"
 #include "fraction.h"
 #include "base_conversion.h"
+#include "system_utils.h"
 
 #define MAX_INPUT 1024
 
@@ -13,6 +14,7 @@
 void print_help() {
     printf("\nArbitrary Precision Calculator\n");
     printf("Available operations:\n");
+    printf("  clear                Clear the screen\n");
     printf("  <num1> + <num2>      Addition\n");
     printf("  <num1> - <num2>      Subtraction\n");
     printf("  <num1> * <num2>      Multiplication\n");
@@ -45,6 +47,10 @@ int main() {
         if(strcmp(input, "exit") == 0) break;
         if(strcmp(input, "help") == 0) {
             print_help();
+            continue;
+        }
+        if(strcmp(input, "clear") == 0) {
+            clear_screen();
             continue;
         }
         
@@ -157,6 +163,10 @@ int main() {
                 result = add_fractions(f1, f2);
             } else if(*op == '*') {
                 result = multiply_fractions(f1, f2);
+            } else if(*op == '-') {
+                result = subtract_fractions(f1, f2);
+            } else if(*op == '/') {
+                result = divide_fractions(f1, f2);
             } else {
                 printf("Unsupported fraction operation\n");
             }
@@ -203,9 +213,11 @@ int main() {
         
         if(result) {
             print_arbitrary_int(result);
+            printf("\n");
             if(remainder) {
                 printf("Remainder: ");
                 print_arbitrary_int(remainder);
+                printf("\n");
                 free_arbitrary_int(remainder);
             }
             free_arbitrary_int(result);
@@ -215,6 +227,6 @@ int main() {
         free_arbitrary_int(b);
     }
     
-    printf("Goodbye!\n");
+    printf("Exiting...\n");
     return 0;
 }
