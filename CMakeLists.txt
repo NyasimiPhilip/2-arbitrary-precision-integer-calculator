@@ -12,7 +12,6 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 add_library(calculator_lib
     src/ArbitraryInt.c
     src/base_conversion.c
-    src/fraction.c
     src/operations.c
     src/parser.c
     src/system_utils.c

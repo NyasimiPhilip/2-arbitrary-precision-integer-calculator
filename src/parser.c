@@ -1,9 +1,7 @@
 #include "parser.h"
-#include "fraction.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
 // Helper function to trim whitespace
 static char* trim(char* str) {
@@ -20,56 +18,6 @@ static char* trim(char* str) {
     end[1] = '\0';
     
     return str;
-}
-
-Fraction* parse_fraction(const char* str) {
-    if (!str) return NULL;
-    
-    // Make a copy of the string to modify
-    char* input = strdup(str);
-    if (!input) return NULL;
-    
-    // Trim whitespace
-    char* trimmed = trim(input);
-    
-    // Find the division symbol
-    char* slash = strchr(trimmed, '/');
-    if (!slash) {
-        free(input);
-        return NULL;
-    }
-    
-    // Split the string at the slash
-    *slash = '\0';
-    char* num_str = trim(trimmed);
-    char* den_str = trim(slash + 1);
-    
-    // Validate both parts exist
-    if (!*num_str || !*den_str) {
-        free(input);
-        return NULL;
-    }
-    
-    // Create ArbitraryInts
-    ArbitraryInt* num = create_arbitrary_int(num_str);
-    ArbitraryInt* den = create_arbitrary_int(den_str);
-    
-    free(input);  // Free the copied string
-    
-    if (!num || !den) {
-        free_arbitrary_int(num);
-        free_arbitrary_int(den);
-        return NULL;
-    }
-    
-    // Create and return the fraction
-    Fraction* result = create_fraction(num, den);
-    
-    // Clean up
-    free_arbitrary_int(num);
-    free_arbitrary_int(den);
-    
-    return result;
 }
 
 void parse_logarithm(const char* str, char** base_str, char** num_str) {

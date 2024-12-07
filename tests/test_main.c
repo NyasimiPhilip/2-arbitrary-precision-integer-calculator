@@ -3,25 +3,8 @@
 #include <assert.h>
 #include <string.h>
 #include "operations.h"
-#include "fraction.h"
 #include "base_conversion.h"
 #include "parser.h"
-
-void test_parse_fraction() {
-    printf("Testing fraction parsing...\n");
-    
-    Fraction *frac = parse_fraction("1/2");
-    assert(frac != NULL);
-    assert(strcmp(frac->numerator->value, "1") == 0);
-    assert(strcmp(frac->denominator->value, "2") == 0);
-    free_fraction(frac);
-    
-    // Test invalid input
-    frac = parse_fraction("1");
-    assert(frac == NULL);
-    
-    printf("Fraction parsing tests passed!\n");
-}
 
 void test_parse_logarithm() {
     printf("Testing logarithm parsing...\n");
@@ -46,9 +29,8 @@ void test_parse_logarithm() {
 int main() {
     printf("Starting main functionality tests...\n\n");
     
-    test_parse_fraction();
     test_parse_logarithm();
-    
+
     printf("\nAll main functionality tests passed successfully!\n");
     return 0;
 }
