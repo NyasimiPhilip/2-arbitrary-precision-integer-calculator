@@ -1,6 +1,6 @@
 # Arbitrary Precision Calculator
 
-This project is an arbitrary precision calculator implemented in C. It supports operations on large integers, fractions, and base conversions without relying on any external libraries for core functionality. The calculator is wrapped in a REPL (Read-Eval-Print Loop) for interactive use.
+This project is an arbitrary precision calculator implemented in C. It supports operations on large integers, and base conversions without relying on any external libraries for core functionality. The calculator is wrapped in a REPL (Read-Eval-Print Loop) for interactive use.
 
 ## How It Works
 
@@ -8,9 +8,8 @@ The calculator uses a string-based representation for arbitrary precision intege
 
 1. **ArbitraryInt**: Core data structure that stores numbers as strings, handling signs separately
 2. **Base Conversion**: Supports conversion between bases 2-36 using digit-by-digit processing
-3. **Fraction Support**: Implements rational number arithmetic with automatic simplification
-4. **Basic Operations**: Implements arithmetic algorithms for basic operations
-5. **Advanced Operations**: Includes power, factorial, and logarithm calculations
+3. **Basic Operations**: Implements arithmetic algorithms for basic operations
+4. **Advanced Operations**: Includes power, factorial, and logarithm calculations
 
 ## Building the Project
 
@@ -68,13 +67,11 @@ gcc src/main.c -L. -lcalculator -I./include -o calculator
 # Compile tests
 gcc tests/test_arbitraryint.c -L. -lcalculator -I./include -o test_arbitraryint
 gcc tests/test_base_conversion.c -L. -lcalculator -I./include -o test_base_conversion
-gcc tests/test_fraction.c -L. -lcalculator -I./include -o test_fraction
 gcc tests/test_operations.c -L. -lcalculator -I./include -o test_operations
 
 # Run tests
 ./test_arbitraryint
 ./test_base_conversion
-./test_fraction
 ./test_operations
 ```
 
@@ -115,17 +112,20 @@ make test
 # Clean build files
 make clean
 ```
+### Option 4:Use the provided build.c file in the root of the project
+```bash
+#Compile the program
+gcc build.c -o build
+```
+#### Unix/Linux/Mac:
+```bash
+#Compile the program
+./build
+```
 
 #### Windows (MinGW):
-```powershell
-# Build everything
-mingw32-make
-
-# Run tests
-mingw32-make test
-
-# Clean build files
-mingw32-make clean
+```bash
+./build.exe
 ```
 
 ### Running the Calculator
@@ -150,7 +150,7 @@ mingw32-make clean
 1111111110
 > 1000000000 - 1
 999999999
-> 12345 98765
+> 12345 * 98765
 1219253925
 > 1000000 / 3
 333333
@@ -201,14 +201,12 @@ FF
 
 The project includes comprehensive test suites for:
 - Basic arithmetic operations
-- Fraction arithmetic
 - Base conversion
 - Edge cases (very large numbers, zero, negative numbers)
 - Error conditions
 
 Run the test suite:
 ./test_arbitraryint
-./test_fraction
 ./test_base_conversion
 ./test_operations
 
@@ -228,6 +226,5 @@ The calculator supports the following command formats:
 
 - Memory is limited by available system resources
 - Performance may degrade with very large numbers
-- Decimal fractions are not supported (only rational numbers)
 - Negative exponents are not supported
 - Logarithms return floor values only

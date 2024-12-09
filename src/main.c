@@ -19,7 +19,7 @@ void print_help() {
     printf("  <num1> * <num2>      Multiplication\n");
     printf("  <num1> / <num2>      Division\n");
     printf("  <num1> %% <num2>     Modulo\n");
-    printf("  <num1> ^ <num2>      Power\n");
+    printf("  <num1> ^ <num2>      rPower\n");
     printf("  <num>!               Factorial\n");
     printf("  log<base>(<num>)     Logarithm\n");
     printf("  to_base <num> <base>    Convert to base\n");
