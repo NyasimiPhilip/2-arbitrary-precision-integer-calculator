@@ -6,6 +6,8 @@
 #include "operations.h"
 #include "base_conversion.h"
 #include "system_utils.h"
+#include "parser.h"
+#include "fraction.h"
 
 #define MAX_INPUT 1024
 
@@ -189,6 +191,49 @@ int main() {
         
         free_arbitrary_int(a);
         free_arbitrary_int(b);
+        
+        // Check for fractions
+        if(strchr(first, '/') && strchr(second, '/')) {
+            Fraction *f1 = parse_fraction(first);
+            Fraction *f2 = parse_fraction(second);
+            
+            if(!f1 || !f2) {
+                printf("Invalid fraction format\n");
+                free_fraction(f1);
+                free_fraction(f2);
+                continue;
+            }
+            
+            Fraction *result = NULL;
+            switch(*op) {
+                case '+':
+                    result = add_fractions(f1, f2);
+                    break;
+                case '-':
+                    result = subtract_fractions(f1, f2);
+                    break;
+                case '*':
+                    result = multiply_fractions(f1, f2);
+                    break;
+                case '/':
+                    result = divide_fractions(f1, f2);
+                    break;
+                default:
+                    printf("Unsupported fraction operation: %c\n", *op);
+            }
+            
+            if(result) {
+                print_fraction(result);
+                printf("\n");
+                free_fraction(result);
+            } else {
+                printf("Error performing fraction operation\n");
+            }
+            
+            free_fraction(f1);
+            free_fraction(f2);
+            continue;
+        }
     }
     
     printf("Exiting...\n");

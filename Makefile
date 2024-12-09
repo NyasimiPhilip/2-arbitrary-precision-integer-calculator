@@ -25,4 +25,4 @@ test: $(TEST_BINS)
 	for test in $(TEST_BINS); do ./$$test; done
 
 clean:
-	rm -f $(OBJS) calculator libcalculator.a $(TEST_BINS) 
+	rm -f $(OBJS) calculator libcalculator.a $(TEST_BINS) *.o

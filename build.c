@@ -20,6 +20,7 @@ int main() {
         return 1;
     }
 
+    // Build with Release configuration
     if (system("cd build && cmake --build . --config Release") != 0) {
         fprintf(stderr, "Error: Failed to build the project.\n");
         return 1;
@@ -28,10 +29,10 @@ int main() {
     // Navigate to the release directory and run the executable
 #ifdef _WIN32
     // Windows: use .\\ for running executables
-    if (system("cd build\\release && .\\calculator.exe") != 0) {
+    if (system("cd build\\Release && .\\calculator.exe") != 0) {
 #else
     // Unix-like OS: use ./ for running executables
-    if (system("cd build/release && ./calculator") != 0) {
+    if (system("cd build/Release && ./calculator") != 0) {
 #endif
         fprintf(stderr, "Error: Failed to run the executable.\n");
         return 1;

@@ -1,7 +1,9 @@
 #include "parser.h"
+#include "fraction.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 // Helper function to trim whitespace
 static char* trim(char* str) {
@@ -18,6 +20,58 @@ static char* trim(char* str) {
     end[1] = '\0';
     
     return str;
+}
+
+Fraction* parse_fraction(const char* str) {
+    if (!str) return NULL;
+
+    // Find the division symbol
+    const char* slash = strchr(str, '/');
+    if (!slash) return NULL;
+
+    // Calculate lengths
+    size_t num_len = slash - str;
+    size_t den_len = strlen(slash + 1);
+
+    // Allocate and copy numerator string
+    char* num_str = malloc(num_len + 1);
+    if (!num_str) return NULL;
+    strncpy(num_str, str, num_len);
+    num_str[num_len] = '\0';
+
+    // Allocate and copy denominator string
+    char* den_str = malloc(den_len + 1);
+    if (!den_str) {
+        free(num_str);
+        return NULL;
+    }
+    strcpy(den_str, slash + 1);
+
+    // Trim both strings
+    char* trimmed_num = trim(num_str);
+    char* trimmed_den = trim(den_str);
+
+    // Create ArbitraryInts
+    ArbitraryInt* num = create_arbitrary_int(trimmed_num);
+    ArbitraryInt* den = create_arbitrary_int(trimmed_den);
+
+    // Free temporary strings
+    free(num_str);
+    free(den_str);
+
+    if (!num || !den) {
+        free_arbitrary_int(num);
+        free_arbitrary_int(den);
+        return NULL;
+    }
+
+    // Create and return the fraction
+    Fraction* result = create_fraction(num, den);
+
+    free_arbitrary_int(num);
+    free_arbitrary_int(den);
+
+    return result;
 }
 
 void parse_logarithm(const char* str, char** base_str, char** num_str) {
