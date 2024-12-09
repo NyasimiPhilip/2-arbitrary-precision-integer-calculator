@@ -1,8 +1,27 @@
+/**
+ * @file test_operations.c
+ * @brief Test suite for arithmetic operations
+ *
+ * Tests all arithmetic operations including:
+ * - Basic arithmetic (+, -, *, /, %)
+ * - Advanced operations (power, factorial, logarithm)
+ * - Edge cases and error conditions
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "../include/operations.h"
 
+/**
+ * @brief Tests basic arithmetic operations
+ * 
+ * Verifies:
+ * - Addition with carrying
+ * - Subtraction with borrowing
+ * - Multiplication of large numbers
+ * - Sign handling
+ */
 void test_basic_arithmetic() {
     ArbitraryInt *a, *b, *result;
     
@@ -58,6 +77,15 @@ void test_basic_arithmetic() {
     printf("Basic arithmetic tests passed!\n");
 }
 
+/**
+ * @brief Tests division and modulo operations
+ * 
+ * Tests:
+ * - Basic division with remainder
+ * - Division by zero handling
+ * - Large number division
+ * - Modulo operation
+ */
 void test_division_and_modulo() {
     printf("Testing division and modulo...\n");
     

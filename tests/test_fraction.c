@@ -1,9 +1,28 @@
+/**
+ * @file test_fraction.c
+ * @brief Test suite for fraction operations
+ *
+ * Comprehensive tests for fraction functionality including:
+ * - Creation and destruction
+ * - Basic arithmetic
+ * - Simplification
+ * - Edge cases
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "../include/fraction.h"
 #include "../include/parser.h"
 
+/**
+ * @brief Tests fraction creation and basic properties
+ * 
+ * Verifies:
+ * - Basic fraction creation
+ * - Sign handling
+ * - Memory management
+ */
 void test_fraction_creation() {
     printf("Testing fraction creation...\n");
     
@@ -21,6 +40,14 @@ void test_fraction_creation() {
     printf("Fraction creation tests passed!\n");
 }
 
+/**
+ * @brief Tests fraction simplification
+ * 
+ * Verifies:
+ * - GCD computation
+ * - Automatic simplification
+ * - Sign normalization
+ */
 void test_fraction_simplification() {
     printf("Testing fraction simplification...\n");
     
@@ -39,6 +66,14 @@ void test_fraction_simplification() {
     printf("Fraction simplification tests passed!\n");
 }
 
+/**
+ * @brief Tests fraction addition operations
+ * 
+ * Tests:
+ * - Simple addition (1/2 + 1/12 = 7/12)
+ * - Addition resulting in improper fraction (3/4 + 1/2 = 5/4)
+ * - Memory management during operation
+ */
 void test_fraction_addition() {
     printf("Testing fraction addition...\n");
     
@@ -69,6 +104,13 @@ void test_fraction_addition() {
     printf("Fraction addition tests passed!\n");
 }
 
+/**
+ * @brief Tests fraction multiplication operations
+ * 
+ * Tests:
+ * - Basic multiplication with simplification (2/3 * 3/4 = 1/2)
+ * - Memory handling during multiplication
+ */
 void test_fraction_multiplication() {
     printf("Testing fraction multiplication...\n");
     
@@ -87,6 +129,14 @@ void test_fraction_multiplication() {
     printf("Fraction multiplication tests passed!\n");
 }
 
+/**
+ * @brief Tests fraction division operations
+ * 
+ * Tests:
+ * - Basic division (3/4 / 1/2 = 3/2)
+ * - Memory management
+ * - Result simplification
+ */
 void test_fraction_division() {
     printf("Testing fraction division...\n");
     
@@ -105,6 +155,14 @@ void test_fraction_division() {
     printf("Fraction division tests passed!\n");
 }
 
+/**
+ * @brief Tests fraction subtraction operations
+ * 
+ * Tests:
+ * - Basic subtraction with simplification (1/2 - 1/3 = 1/6)
+ * - Memory management
+ * - Result validation
+ */
 void test_fraction_subtraction() {
     printf("Testing fraction subtraction...\n");
     
@@ -123,6 +181,16 @@ void test_fraction_subtraction() {
     printf("Fraction subtraction tests passed!\n");
 }
 
+/**
+ * @brief Main test runner
+ * 
+ * Executes all fraction operation tests in sequence:
+ * 1. Creation and basic properties
+ * 2. Fraction simplification
+ * 3. Basic arithmetic operations
+ * 
+ * @return 0 on success, non-zero on failure
+ */
 int main() {
     printf("Starting fraction tests...\n\n");
     

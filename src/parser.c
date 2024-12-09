@@ -1,3 +1,11 @@
+/**
+ * @file parser.c
+ * @brief Implementation of input parsing functionality
+ *
+ * Contains implementations for parsing fractions and logarithmic expressions
+ * from string input. Handles whitespace, validation, and memory management.
+ */
+
 #include "parser.h"
 #include "fraction.h"
 #include <stdio.h>
@@ -5,7 +13,11 @@
 #include <string.h>
 #include <ctype.h>
 
-// Helper function to trim whitespace
+/**
+ * @brief Helper function to remove leading/trailing whitespace
+ * @param str String to trim
+ * @return Pointer to trimmed string (same memory as input)
+ */
 static char* trim(char* str) {
     if (!str) return NULL;
     
@@ -22,6 +34,15 @@ static char* trim(char* str) {
     return str;
 }
 
+/**
+ * @brief Implementation of fraction parsing
+ * 
+ * Parses strings in format "numerator/denominator". Handles:
+ * - Leading/trailing whitespace
+ * - Memory allocation
+ * - Input validation
+ * - Error conditions
+ */
 Fraction* parse_fraction(const char* str) {
     if (!str) return NULL;
 
@@ -74,6 +95,14 @@ Fraction* parse_fraction(const char* str) {
     return result;
 }
 
+/**
+ * @brief Implementation of logarithm parsing
+ * 
+ * Parses strings in format "logB(N)" where:
+ * - B is optional base (defaults to 10)
+ * - N is the number
+ * Handles whitespace and validation.
+ */
 void parse_logarithm(const char* str, char** base_str, char** num_str) {
     if (!str || !base_str || !num_str) {
         if (base_str) *base_str = NULL;

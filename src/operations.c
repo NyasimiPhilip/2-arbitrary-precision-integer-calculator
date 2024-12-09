@@ -1,8 +1,24 @@
+/**
+ * @file operations.c
+ * @brief Implementation of arithmetic operations
+ *
+ * Implements all arithmetic operations for arbitrary precision integers:
+ * - Basic operations (add, subtract, multiply, divide, modulo)
+ * - Advanced operations (power, factorial, logarithm)
+ * - Utility functions (copy, comparison)
+ */
+
 #include "../include/operations.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
+/**
+ * @brief Addition wrapper function
+ * @param a First operand
+ * @param b Second operand
+ * @return Sum as new ArbitraryInt* or NULL on error
+ */
 ArbitraryInt* add(const ArbitraryInt *a, const ArbitraryInt *b) {
     return add_arbitrary_ints(a, b);
 }

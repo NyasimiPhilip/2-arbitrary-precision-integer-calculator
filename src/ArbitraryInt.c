@@ -1,15 +1,74 @@
+/**
+ * @file ArbitraryInt.c
+ * @brief Implementation of arbitrary precision integer operations
+ *
+ * Core implementation of arbitrary precision integers using string-based
+ * storage. Includes basic arithmetic and utility functions.
+ */
+
 #include "ArbitraryInt.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-// Helper function to remove leading zeros
+/**
+ * @brief Removes leading zeros from a number string
+ * @param str Input string
+ * @return New string without leading zeros
+ */
 static char* remove_leading_zeros(const char *str) {
     while(*str == '0' && *(str+1) != '\0') {
         str++;
     }
     return _strdup(str);
+}
+
+/**
+ * @brief Reverses a string in place
+ * @param str String to reverse
+ */
+static void reverse_str(char *str) {
+    int i, j;
+    char temp;
+    size_t len = strlen(str);
+    for(i = 0, j = len -1; i < j; i++, j--) {
+        temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+    }
+}
+
+/**
+ * @brief Adds absolute values of two numbers
+ * @param a First number
+ * @param b Second number
+ * @return Sum as string
+ */
+static char* add_absolute(const char *a, const char *b) {
+    size_t len_a = strlen(a);
+    size_t len_b = strlen(b);
+    size_t max_len = (len_a > len_b) ? len_a : len_b;
+    char *result = calloc(max_len + 2, sizeof(char)); // +1 for possible carry, +1 for '\0'
+    if(!result) {
+        perror("Failed to allocate memory for addition");
+        exit(EXIT_FAILURE);
+    }
+
+    int carry = 0, sum;
+    int digit_a, digit_b;
+    for(int i = 0; i < max_len; i++) {
+        digit_a = (i < len_a) ? (a[len_a -1 -i] - '0') : 0;
+        digit_b = (i < len_b) ? (b[len_b -1 -i] - '0') : 0;
+        sum = digit_a + digit_b + carry;
+        carry = sum / 10;
+        result[i] = (sum % 10) + '0';
+    }
+    if(carry) {
+        result[max_len] = carry + '0';
+    }
+    reverse_str(result);
+    return result;
 }
 
 // Factory function to create ArbitraryInt from string
@@ -99,45 +158,6 @@ void print_arbitrary_int(const ArbitraryInt *num) {
         printf("-");
     }
     printf("%s", num->value);
-}
-
-// Helper function to reverse a string in place
-static void reverse_str(char *str) {
-    int i, j;
-    char temp;
-    size_t len = strlen(str);
-    for(i = 0, j = len -1; i < j; i++, j--) {
-        temp = str[i];
-        str[i] = str[j];
-        str[j] = temp;
-    }
-}
-
-// Addition of absolute values
-static char* add_absolute(const char *a, const char *b) {
-    size_t len_a = strlen(a);
-    size_t len_b = strlen(b);
-    size_t max_len = (len_a > len_b) ? len_a : len_b;
-    char *result = calloc(max_len + 2, sizeof(char)); // +1 for possible carry, +1 for '\0'
-    if(!result) {
-        perror("Failed to allocate memory for addition");
-        exit(EXIT_FAILURE);
-    }
-
-    int carry = 0, sum;
-    int digit_a, digit_b;
-    for(int i = 0; i < max_len; i++) {
-        digit_a = (i < len_a) ? (a[len_a -1 -i] - '0') : 0;
-        digit_b = (i < len_b) ? (b[len_b -1 -i] - '0') : 0;
-        sum = digit_a + digit_b + carry;
-        carry = sum / 10;
-        result[i] = (sum % 10) + '0';
-    }
-    if(carry) {
-        result[max_len] = carry + '0';
-    }
-    reverse_str(result);
-    return result;
 }
 
 // Subtraction of absolute values (a >= b)

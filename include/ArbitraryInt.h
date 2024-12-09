@@ -1,26 +1,50 @@
+/**
+ * @file ArbitraryInt.h
+ * @brief Core arbitrary precision integer implementation
+ *
+ * Provides the fundamental data structure and operations for
+ * handling integers of arbitrary size. Numbers are stored as
+ * strings of digits with separate sign handling.
+ */
+
 #ifndef ARBITRARYINT_H
 #define ARBITRARYINT_H
 
 #include <stdbool.h>
 
+/**
+ * @brief Structure representing an arbitrary precision integer
+ */
 typedef struct {
-    bool is_negative;
-    char *value; // Digits as a null-terminated string
+    bool is_negative;  /**< Sign flag (true if negative) */
+    char *value;      /**< String of digits (null-terminated) */
 } ArbitraryInt;
 
-// Constructor
+/**
+ * @brief Creates a new arbitrary precision integer from string
+ * @param str String representation of number
+ * @return New ArbitraryInt* or NULL on error
+ */
 ArbitraryInt* create_arbitrary_int(const char *str);
 
-// Destructor
+/**
+ * @brief Frees memory used by an arbitrary precision integer
+ * @param num Number to free
+ */
 void free_arbitrary_int(ArbitraryInt *num);
 
-// Utility Functions
-ArbitraryInt* add_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
-ArbitraryInt* subtract_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
-ArbitraryInt* multiply_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
+/**
+ * @brief Compares two arbitrary precision integers
+ * @param a First number
+ * @param b Second number
+ * @return -1 if a<b, 0 if a=b, 1 if a>b
+ */
 int compare_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
 
-// Debugging
+/**
+ * @brief Prints an arbitrary precision integer
+ * @param num Number to print
+ */
 void print_arbitrary_int(const ArbitraryInt *num);
 
 #endif // ARBITRARYINT_H 

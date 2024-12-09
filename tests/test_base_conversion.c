@@ -1,9 +1,28 @@
+/**
+ * @file test_base_conversion.c
+ * @brief Test suite for base conversion operations
+ *
+ * Tests conversion between different number bases:
+ * - Binary (base 2)
+ * - Decimal (base 10)
+ * - Hexadecimal (base 16)
+ * - Arbitrary bases up to 36
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "../include/base_conversion.h"
 #include "../include/ArbitraryInt.h"
 
+/**
+ * @brief Tests decimal to binary conversion
+ * 
+ * Verifies:
+ * - Simple number conversion
+ * - Zero handling
+ * - Large number conversion
+ */
 void test_decimal_to_binary() {
     printf("Testing decimal to binary conversion...\n");
     
@@ -22,6 +41,14 @@ void test_decimal_to_binary() {
     printf("Decimal to binary tests passed!\n");
 }
 
+/**
+ * @brief Tests decimal to hexadecimal conversion
+ * 
+ * Tests:
+ * - Basic conversion
+ * - Letter digits (A-F)
+ * - Large numbers
+ */
 void test_decimal_to_hex() {
     printf("Testing decimal to hexadecimal conversion...\n");
     

@@ -1,10 +1,30 @@
+/**
+ * fraction.c - Fraction Operations Implementation
+ * 
+ * This module implements rational number arithmetic using arbitrary precision
+ * integers. Features include:
+ * - Automatic fraction simplification using GCD
+ * - Support for improper fractions (e.g., 5/4)
+ * - Basic arithmetic operations (+, -, *, /)
+ * - Proper sign handling
+ */
+
 #include "fraction.h"
 #include "operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-// Helper function to compute GCD
+/**
+ * gcd - Calculate Greatest Common Divisor
+ * @a: First arbitrary integer
+ * @b: Second arbitrary integer
+ *
+ * Uses Euclidean algorithm to find GCD for fraction simplification.
+ * Handles signs by converting to absolute values first.
+ *
+ * Return: ArbitraryInt* containing the GCD
+ */
 static ArbitraryInt* gcd(const ArbitraryInt *a, const ArbitraryInt *b) {
     ArbitraryInt *temp_a = copy_arbitrary_int(a);
     ArbitraryInt *temp_b = copy_arbitrary_int(b);
@@ -24,6 +44,16 @@ static ArbitraryInt* gcd(const ArbitraryInt *a, const ArbitraryInt *b) {
     return temp_a;
 }
 
+/**
+ * create_fraction - Create and simplify a new fraction
+ * @numerator: ArbitraryInt for numerator
+ * @denominator: ArbitraryInt for denominator
+ *
+ * Creates a new fraction and automatically simplifies it using GCD.
+ * Handles sign normalization (negative denominator case).
+ *
+ * Return: Pointer to new Fraction or NULL on error
+ */
 Fraction* create_fraction(const ArbitraryInt *numerator, const ArbitraryInt *denominator) {
     if (!numerator || !denominator || strcmp(denominator->value, "0") == 0) {
         return NULL;
@@ -58,6 +88,16 @@ Fraction* create_fraction(const ArbitraryInt *numerator, const ArbitraryInt *den
     return result;
 }
 
+/**
+ * add_fractions - Add two fractions
+ * @a: First fraction
+ * @b: Second fraction
+ *
+ * Implements (a/b + c/d) = (ad + bc)/(bd)
+ * Result is automatically simplified.
+ *
+ * Return: Pointer to new Fraction containing sum
+ */
 Fraction* add_fractions(const Fraction *a, const Fraction *b) {
     if (!a || !b) return NULL;
 

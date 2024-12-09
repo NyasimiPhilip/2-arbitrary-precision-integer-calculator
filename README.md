@@ -1,6 +1,6 @@
 # Arbitrary Precision Calculator
 
-This project is an arbitrary precision calculator implemented in C. It supports operations on large integers, and base conversions without relying on any external libraries for core functionality. The calculator is wrapped in a REPL (Read-Eval-Print Loop) for interactive use.
+This project is an arbitrary precision calculator implemented in C. It supports operations on large integers,fractions, and base conversions without relying on any external libraries for core functionality. The calculator is wrapped in a REPL (Read-Eval-Print Loop) for interactive use.
 
 ## How It Works
 
@@ -10,6 +10,15 @@ The calculator uses a string-based representation for arbitrary precision intege
 2. **Base Conversion**: Supports conversion between bases 2-36 using digit-by-digit processing
 3. **Basic Operations**: Implements arithmetic algorithms for basic operations
 4. **Advanced Operations**: Includes power, factorial, and logarithm calculations
+5. **Fraction Operations**: Handles rational numbers with automatic simplification
+6. **Expression Evaluation**: Supports complex expressions with PEMDAS/BODMAS order of operations
+
+## Order of Operations (PEMDAS/BODMAS)
+The calculator follows standard mathematical order of operations:
+1. **P**arentheses/Brackets
+2. **E**xponents/**O**rders (powers)
+3. **M**ultiplication and **D**ivision (left to right)
+4. **A**ddition and **S**ubtraction (left to right)
 
 ## Building the Project
 
@@ -75,7 +84,7 @@ gcc tests/test_operations.c -L. -lcalculator -I./include -o test_operations
 ./test_operations
 ```
 
-#### Windows (MinGW):
+#### Windows :
 ```powershell
 # Compile library
 gcc -c src/*.c -I./include
@@ -157,6 +166,30 @@ gcc build.c -o build
 Remainder: 1
 ```
 
+### Complex Expressions
+```bash
+> 2 + 3 * 4
+14
+> (2 + 3) * 4
+20
+> 2 ^ 3 + 4
+12
+> (5 + 3) * (2 + 1)
+24
+```
+
+### Fraction Arithmetic
+```bash
+> 1/2 + 1/3
+5/6
+> 3/4 - 1/6
+7/12
+> 2/3 * 3/4
+1/2
+> 3/4 / 1/2
+3/2
+```
+
 ### Base Conversion
 ```bash
 > to_base 42 2
@@ -182,7 +215,23 @@ FF
 - Numbers are stored as strings of digits
 - Sign is stored separately as a boolean
 - Leading zeros are automatically removed
-- Fractions store numerator and denominator separately
+
+### Expression Evaluation
+- Tokenizes input into numbers, operators, and parentheses
+- Implements Shunting Yard algorithm for operator precedence
+- Supports nested parentheses for complex grouping
+- Handles operator precedence according to PEMDAS/BODMAS rules
+
+### Fraction Implementation
+- Fractions are stored as pairs of ArbitraryInts (numerator/denominator)
+- Automatic simplification using GCD (Greatest Common Divisor)
+- Support for improper fractions (e.g., 5/4)
+- Sign normalization (denominator is always positive)
+- Operations:
+  * Addition: (a/b + c/d) = (ad + bc)/(bd)
+  * Subtraction: (a/b - c/d) = (ad - bc)/(bd)
+  * Multiplication: (a/b * c/d) = (ac)/(bd)
+  * Division: (a/b / c/d) = (ad)/(bc)
 
 ### Algorithms
 - Addition/Subtraction: Digit-by-digit processing with carry/borrow
@@ -190,18 +239,23 @@ FF
 - Division: Long division with remainder
 - Base Conversion: Repeated division method
 - GCD: Euclidean algorithm for fraction simplification
+- Fraction Arithmetic: Uses cross multiplication and GCD simplification
 
 ### Error Handling
 - Division by zero checks
 - Invalid base handling (must be 2-36)
 - Memory allocation failure detection
 - Invalid input format detection
+- Invalid fraction format detection
+- Mismatched parentheses detection
+- Invalid expression syntax detection
 
 ## Testing
 
 The project includes comprehensive test suites for:
 - Basic arithmetic operations
 - Base conversion
+- Fraction operations and simplification
 - Edge cases (very large numbers, zero, negative numbers)
 - Error conditions
 

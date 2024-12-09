@@ -1,20 +1,25 @@
+/**
+ * build.c - Build Script for Arbitrary Precision Calculator
+ *
+ * Provides a simple way to build the project across different platforms.
+ * Handles directory creation, CMake configuration, and build process.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
 int main() {
-    // Create build directory
+    // Create build directory with platform-specific commands
 #ifdef _WIN32
-    // Use Windows-specific mkdir
     if (system("mkdir build") != 0) {
 #else
-    // Use Unix-like mkdir with -p for intermediate directories
     if (system("mkdir -p build") != 0) {
 #endif
         fprintf(stderr, "Error: Failed to create build directory.\n");
         return 1;
     }
 
-    // Navigate into the build directory and run CMake commands
+    // Generate build files using CMake
     if (system("cd build && cmake ..") != 0) {
         fprintf(stderr, "Error: Failed to generate build files.\n");
         return 1;
@@ -26,12 +31,10 @@ int main() {
         return 1;
     }
 
-    // Navigate to the release directory and run the executable
+    // Run the executable from the correct location
 #ifdef _WIN32
-    // Windows: use .\\ for running executables
     if (system("cd build\\Release && .\\calculator.exe") != 0) {
 #else
-    // Unix-like OS: use ./ for running executables
     if (system("cd build/Release && ./calculator") != 0) {
 #endif
         fprintf(stderr, "Error: Failed to run the executable.\n");

@@ -1,4 +1,11 @@
-// src/base_conversion.c
+/**
+ * @file base_conversion.c
+ * @brief Implementation of number base conversion
+ *
+ * Provides functionality to convert numbers between different bases (2-36).
+ * Supports both to_base (decimal to target base) and from_base (source base to decimal).
+ */
+
 #include "base_conversion.h"
 #include "operations.h"
 #include <stdio.h>
@@ -6,9 +13,14 @@
 #include <string.h>
 #include <ctype.h>
 
+/** Lookup table for digit characters (0-9, A-Z) */
 static const char digits_map[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-// Helper: Converts a single digit character to its numerical value
+/**
+ * @brief Converts a single character to its numerical value
+ * @param c Character to convert
+ * @return Numerical value (0-35) or -1 if invalid
+ */
 static int char_to_value(char c) {
     if(c >= '0' && c <= '9') return c - '0';
     if(c >= 'A' && c <= 'Z') return 10 + (c - 'A');
@@ -16,6 +28,12 @@ static int char_to_value(char c) {
     return -1; // Invalid character
 }
 
+/**
+ * @brief Converts a decimal number to specified base
+ * @param num Number to convert
+ * @param base Target base (2-36)
+ * @return String representation in target base or NULL on error
+ */
 char* to_base(const ArbitraryInt *num, int base) {
     if(base < 2 || base > 36) {
         fprintf(stderr, "Base must be between 2 and 36.\n");
@@ -69,6 +87,12 @@ char* to_base(const ArbitraryInt *num, int base) {
     return result;
 }
 
+/**
+ * @brief Converts a number from specified base to decimal
+ * @param str String representation in source base
+ * @param base Source base (2-36)
+ * @return Decimal ArbitraryInt* or NULL on error
+ */
 ArbitraryInt* from_base(const char *str, int base) {
     if(base < 2 || base > 36) {
         fprintf(stderr, "Base must be between 2 and 36.\n");
