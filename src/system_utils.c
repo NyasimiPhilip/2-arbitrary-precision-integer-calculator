@@ -20,6 +20,7 @@
      * 3. Flush output
      */
     void clear_screen(void) {
+        system("cls");
         HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
         COORD coord = {0, 0};
         DWORD count;
@@ -28,8 +29,8 @@
         FillConsoleOutputCharacter(hStdOut, ' ', 
             csbi.dwSize.X * csbi.dwSize.Y, coord, &count);
         SetConsoleCursorPosition(hStdOut, coord);
-        system("cls");
         fflush(stdout);
+        printf("\n");
     }
 #else
     #include <unistd.h>
@@ -41,5 +42,6 @@
     void clear_screen(void) {
         system("clear");
         fflush(stdout);
+        printf("\n");
     }
 #endif 

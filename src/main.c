@@ -36,26 +36,26 @@ void print_help() {
     printf("\nArbitrary Precision Calculator\n");
     printf("Available operations:\n");
     printf("  clear                Clear the screen\n");
-    printf("\nBasic Arithmetic:\n");
+    printf("Basic Arithmetic:\n");
     printf("  <num1> + <num2>      Addition\n");
     printf("  <num1> - <num2>      Subtraction\n");
     printf("  <num1> * <num2>      Multiplication\n");
     printf("  <num1> / <num2>      Division\n");
     printf("  <num1> %% <num2>     Modulo\n");
     printf("  <num1> ^ <num2>      Power\n");
-    printf("\nFraction Operations:\n");
+    printf("Fraction Operations:\n");
     printf("  <num1>/<den1> + <num2>/<den2>   Fraction addition\n");
     printf("  <num1>/<den1> - <num2>/<den2>   Fraction subtraction\n");
     printf("  <num1>/<den1> * <num2>/<den2>   Fraction multiplication\n");
     printf("  <num1>/<den1> / <num2>/<den2>   Fraction division\n");
     printf("\nAdvanced Operations:\n");
-    printf("  <num>!               Factorial\n");
-    printf("  log<base>(<num>)     Logarithm\n");
-    printf("  to_base <num> <base>    Convert to base\n");
-    printf("  from_base <num> <base>  Convert from base\n");
+    printf("  <num>!                   Factorial\n");
+    printf("  log<base>(<num>)         Logarithm\n");
+    printf("  to_base <num> <base>     Convert to base\n");
+    printf("  from_base <num> <base>   Convert from base\n");
     printf("\nOther Commands:\n");
-    printf("  help                    Show this help\n");
-    printf("  exit                    Exit calculator\n\n");
+    printf("  help\n");
+    printf("  exit\n\n");
 }
 
 /**
@@ -90,6 +90,19 @@ int main() {
         // Remove trailing newline
         input[strcspn(input, "\n")] = 0;
         
+        // Handle special commands first, before any tokenization
+        if(strcmp(input, "exit") == 0) {
+            break;
+        }
+        if(strcmp(input, "help") == 0) {
+            print_help();
+            continue;
+        }
+        if(strcmp(input, "clear") == 0) {
+            clear_screen();
+            continue;
+        }
+        
         // Parse input into tokens
         char *first = strtok(input, " ");
         char *op = strtok(NULL, " ");
@@ -97,17 +110,6 @@ int main() {
         
         if(!first || !op || !second) {
             printf("Invalid input format\n");
-            continue;
-        }
-        
-        // Handle special commands (exit, help, clear)
-        if(strcmp(input, "exit") == 0) break;
-        if(strcmp(input, "help") == 0) {
-            print_help();
-            continue;
-        }
-        if(strcmp(input, "clear") == 0) {
-            clear_screen();
             continue;
         }
         
