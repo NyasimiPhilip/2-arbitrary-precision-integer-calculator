@@ -40,8 +40,8 @@ cmake ..
 # Build the project
 cmake --build . --config Release
 
-# Run tests
-ctest -C Release
+# Run tests from the build directory
+ctest -C Release -V
 ```
 
 #### Windows (PowerShell):

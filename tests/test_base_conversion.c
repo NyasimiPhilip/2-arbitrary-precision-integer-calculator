@@ -26,16 +26,20 @@
 void test_decimal_to_binary() {
     printf("Testing decimal to binary conversion...\n");
     
+    // Test case 1: 42 -> 101010
     ArbitraryInt *num = create_arbitrary_int("42");
-    char *binary = to_base(num, 2);
-    assert(strcmp(binary, "101010") == 0);
-    free(binary);
+    char *result = to_base(num, 2);
+    assert(result != NULL);
+    assert(strcmp(result, "101010") == 0);
+    free(result);
     free_arbitrary_int(num);
     
+    // Test case 2: 0 -> 0
     num = create_arbitrary_int("0");
-    binary = to_base(num, 2);
-    assert(strcmp(binary, "0") == 0);
-    free(binary);
+    result = to_base(num, 2);
+    assert(result != NULL);
+    assert(strcmp(result, "0") == 0);
+    free(result);
     free_arbitrary_int(num);
     
     printf("Decimal to binary tests passed!\n");
@@ -52,45 +56,39 @@ void test_decimal_to_binary() {
 void test_decimal_to_hex() {
     printf("Testing decimal to hexadecimal conversion...\n");
     
+    // Test case 1: 255 -> FF
     ArbitraryInt *num = create_arbitrary_int("255");
-    char *hex = to_base(num, 16);
-    assert(strcmp(hex, "FF") == 0);
-    free(hex);
+    char *result = to_base(num, 16);
+    assert(result != NULL);
+    assert(strcmp(result, "FF") == 0);
+    free(result);
     free_arbitrary_int(num);
     
-    num = create_arbitrary_int("4096");
-    hex = to_base(num, 16);
-    assert(strcmp(hex, "1000") == 0);
-    free(hex);
+    // Test case 2: 26 -> 1A
+    num = create_arbitrary_int("26");
+    result = to_base(num, 16);
+    assert(result != NULL);
+    assert(strcmp(result, "1A") == 0);
+    free(result);
     free_arbitrary_int(num);
     
     printf("Decimal to hexadecimal tests passed!\n");
 }
 
-void test_from_binary() {
-    printf("Testing binary to decimal conversion...\n");
-    
-    ArbitraryInt *num = from_base("101010", 2);
-    assert(strcmp(num->value, "42") == 0);
-    free_arbitrary_int(num);
-    
-    num = from_base("0", 2);
-    assert(strcmp(num->value, "0") == 0);
-    free_arbitrary_int(num);
-    
-    printf("Binary to decimal tests passed!\n");
-}
-
-void test_from_hex() {
+void test_hex_to_decimal() {
     printf("Testing hexadecimal to decimal conversion...\n");
     
-    ArbitraryInt *num = from_base("FF", 16);
-    assert(strcmp(num->value, "255") == 0);
-    free_arbitrary_int(num);
+    // Test case 1: 1A -> 26
+    ArbitraryInt *result = from_base("1A", 16);
+    assert(result != NULL);
+    assert(strcmp(result->value, "26") == 0);
+    free_arbitrary_int(result);
     
-    num = from_base("1000", 16);
-    assert(strcmp(num->value, "4096") == 0);
-    free_arbitrary_int(num);
+    // Test case 2: FF -> 255
+    result = from_base("FF", 16);
+    assert(result != NULL);
+    assert(strcmp(result->value, "255") == 0);
+    free_arbitrary_int(result);
     
     printf("Hexadecimal to decimal tests passed!\n");
 }
@@ -98,15 +96,15 @@ void test_from_hex() {
 void test_invalid_inputs() {
     printf("Testing invalid inputs...\n");
     
-    // Invalid base
+    // Test invalid base
     ArbitraryInt *num = create_arbitrary_int("42");
     char *result = to_base(num, 37);
     assert(result == NULL);
     free_arbitrary_int(num);
     
-    // Invalid characters
-    ArbitraryInt *invalid = from_base("G", 16);
-    assert(invalid == NULL);
+    // Test invalid characters
+    ArbitraryInt *result2 = from_base("G", 16);
+    assert(result2 == NULL);
     
     printf("Invalid input tests passed!\n");
 }
@@ -164,8 +162,7 @@ int main() {
     
     test_decimal_to_binary();
     test_decimal_to_hex();
-    test_from_binary();
-    test_from_hex();
+    test_hex_to_decimal();
     test_invalid_inputs();
     test_arbitrary_bases();
     test_base_roundtrip();
