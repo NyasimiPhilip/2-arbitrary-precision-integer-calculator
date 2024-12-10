@@ -101,19 +101,29 @@ int main() {
             continue;
         }
         
-        // Parse input into tokens
-        char *first = strtok(input, " ");
-        char *op = strtok(NULL, " ");
-        char *second = strtok(NULL, " ");
+        // Special handling for factorial and logarithm before tokenization
+        // Remove spaces from input for factorial
+        char temp_input[MAX_INPUT];
+        strcpy(temp_input, input);
+        char *p = temp_input;
+        char *q = temp_input;
+        while (*p != '\0') {
+            if (*p != ' ') {
+                *q = *p;
+                q++;
+            }
+            p++;
+        }
+        *q = '\0';
         
-        // Check for single number operations (factorial)
-        if(first && !op && !second && strchr(first, '!')) {
+        if(strchr(temp_input, '!')) {
             // Handle factorial
-            char *num_str = strtok(first, "!");
+            char *num_str = strtok(temp_input, "!");
             if(num_str) {
                 ArbitraryInt *num = create_arbitrary_int(num_str);
                 ArbitraryInt *result = factorial(num);
                 if(result) {
+                    printf("Result: ");
                     print_arbitrary_int(result);
                     printf("\n");
                     free_arbitrary_int(result);
@@ -123,42 +133,11 @@ int main() {
             continue;
         }
         
-        // Check for regular binary operations
-        if(!first || !op || !second) {
-            printf("Invalid input format\n");
-            continue;
-        }
-        
-        // Base Conversion Section
-        // Handles both to_base and from_base commands
-        // Supports bases 2-36 using digits and letters
-        if(strncmp(input, "to_base", 7) == 0) {
-            char *num_str = strtok(input + 8, " ");
-            char *base_str = strtok(NULL, " ");
-            if(!num_str || !base_str) {
-                printf("Usage: to_base <number> <base>\n");
-                continue;
-            }
-            
-            ArbitraryInt *num = create_arbitrary_int(num_str);
-            int base = atoi(base_str);
-            char *result = to_base(num, base);
-            if(result) {
-                printf("%s\n", result);
-                free(result);
-            }
-            free_arbitrary_int(num);
-            continue;
-        }
-        
-        // Logarithm Section
-        // Parses and evaluates logarithmic expressions
-        // Format: logB(N) where B is base and N is number
-        if(strncmp(input, "log", 3) == 0) {
+        if(strncmp(input, "log", 3) == 0 || strchr(input, '(')) {
             char *base_str, *num_str;
             parse_logarithm(input, &base_str, &num_str);
             if(!base_str || !num_str) {
-                printf("Usage: log<base>(<number>)\n");
+                printf("Usage: log<base>(<number>) or log(<number>) for base 10\n");
                 continue;
             }
             
@@ -167,6 +146,7 @@ int main() {
             ArbitraryInt *result = logarithm(num, base);
             
             if(result) {
+                printf("Result: ");
                 print_arbitrary_int(result);
                 printf("\n");
                 free_arbitrary_int(result);
@@ -176,6 +156,120 @@ int main() {
             free(num_str);
             free_arbitrary_int(base);
             free_arbitrary_int(num);
+            continue;
+        }
+        
+        // Parse input into tokens
+        char *first = strtok(input, " ");
+        char *op = strtok(NULL, " ");
+        char *second = strtok(NULL, " ");
+        
+        // Check for second operator for PEMDAS
+        char *third = strtok(NULL, " ");
+        char *fourth = strtok(NULL, " ");
+        
+        if(!first || !op || !second) {
+            printf("Invalid input format\n");
+            continue;
+        }
+        
+        // Handle PEMDAS
+        if(third && fourth) {
+            // If second operator has higher precedence
+            if((*op == '+' || *op == '-') && (*third == '*' || *third == '/' || *third == '^')) {
+                // Evaluate second operation first
+                ArbitraryInt *b = create_arbitrary_int(second);
+                ArbitraryInt *c = create_arbitrary_int(fourth);
+                ArbitraryInt *temp_result = NULL;
+                
+                switch(*third) {
+                    case '*':
+                        temp_result = multiply(b, c);
+                        break;
+                    case '/':
+                        temp_result = divide(b, c, NULL);
+                        break;
+                    case '^':
+                        temp_result = power(b, c);
+                        break;
+                }
+                
+                if(temp_result) {
+                    // Now evaluate first operation
+                    ArbitraryInt *a = create_arbitrary_int(first);
+                    ArbitraryInt *final_result = NULL;
+                    
+                    switch(*op) {
+                        case '+':
+                            final_result = add(a, temp_result);
+                            break;
+                        case '-':
+                            final_result = subtract(a, temp_result);
+                            break;
+                    }
+                    
+                    if(final_result) {
+                        printf("Result: ");
+                        print_arbitrary_int(final_result);
+                        printf("\n");
+                        free_arbitrary_int(final_result);
+                    }
+                    
+                    free_arbitrary_int(a);
+                    free_arbitrary_int(temp_result);
+                }
+                
+                free_arbitrary_int(b);
+                free_arbitrary_int(c);
+                continue;
+            }
+        }
+        
+        // Base Conversion Section
+        // Handles both to_base and from_base commands
+        // Supports bases 2-36 using digits and letters
+        if(strcmp(first, "to_base") == 0) {
+            if(!second || !third) {
+                printf("Usage: to_base <number> <base>\n");
+                continue;
+            }
+            
+            ArbitraryInt *num = create_arbitrary_int(second);
+            int base = atoi(third);
+            if(base < 2 || base > 36) {
+                printf("Base must be between 2 and 36\n");
+                free_arbitrary_int(num);
+                continue;
+            }
+            char *result = to_base(num, base);
+            if(result) {
+                printf("Result: ");
+                printf("%s\n", result);
+                free(result);
+            }
+            free_arbitrary_int(num);
+            continue;
+        }
+        
+        // Handle from_base conversion
+        if(strcmp(first, "from_base") == 0) {
+            if(!second || !third) {
+                printf("Usage: from_base <number> <base>\n");
+                continue;
+            }
+            
+            int base = atoi(third);
+            if(base < 2 || base > 36) {
+                printf("Base must be between 2 and 36\n");
+                continue;
+            }
+            ArbitraryInt *result = from_base(second, base);
+            if(result) {
+                printf("Result: ");
+                print_arbitrary_int(result);
+                printf("\n");
+                free_arbitrary_int(result);
+            }
             continue;
         }
         
