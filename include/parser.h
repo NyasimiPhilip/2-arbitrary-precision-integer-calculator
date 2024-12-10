@@ -29,4 +29,22 @@ Fraction* parse_fraction(const char* str);
  */
 void parse_logarithm(const char* str, char** base_str, char** num_str);
 
+/**
+ * @brief Parses a base conversion command
+ * @param str Input string in format "to_base <number> <base>"
+ * @param num_str Output parameter for number string
+ * @param base_str Output parameter for base string
+ * @return true if parsing successful, false otherwise
+ */
+bool parse_base_conversion(const char* str, char** num_str, char** base_str);
+
+/**
+ * @brief Parses a from_base conversion command
+ * @param str Input string in format "from_base <number> <base>"
+ * @param num_str Output parameter for number string
+ * @param base_str Output parameter for base string
+ * @return true if parsing successful, false otherwise
+ */
+bool parse_from_base(const char* str, char** num_str, char** base_str);
+
 #endif // PARSER_H

@@ -159,3 +159,75 @@ void parse_logarithm(const char* str, char** base_str, char** num_str) {
         return;
     }
 }
+
+bool parse_base_conversion(const char* str, char** num_str, char** base_str) {
+    if (!str || !num_str || !base_str) return false;
+    *num_str = NULL;
+    *base_str = NULL;
+ 
+    // Skip "to_base" and spaces
+    const char* ptr = str + 7;  // Skip "to_base"
+    while (*ptr && isspace(*ptr)) ptr++;
+ 
+    if (!*ptr) return false;
+ 
+    // Find end of number
+    const char* end = ptr;
+    while (*end && !isspace(*end)) end++;
+ 
+    // Copy number
+    size_t num_len = end - ptr;
+    *num_str = malloc(num_len + 1);
+    if (!*num_str) return false;
+    strncpy(*num_str, ptr, num_len);
+    (*num_str)[num_len] = '\0';
+ 
+    // Skip spaces after number
+    ptr = end;
+    while (*ptr && isspace(*ptr)) ptr++;
+ 
+    if (!*ptr) {
+        free(*num_str);
+        return false;
+    }
+ 
+    // Copy base
+    *base_str = strdup(ptr);
+    return true;
+}
+
+bool parse_from_base(const char* str, char** num_str, char** base_str) {
+    if (!str || !num_str || !base_str) return false;
+    *num_str = NULL;
+    *base_str = NULL;
+ 
+    // Skip "from_base" and spaces
+    const char* ptr = str + 9;  // Skip "from_base"
+    while (*ptr && isspace(*ptr)) ptr++;
+ 
+    if (!*ptr) return false;
+ 
+    // Find end of number
+    const char* end = ptr;
+    while (*end && !isspace(*end)) end++;
+ 
+    // Copy number
+    size_t num_len = end - ptr;
+    *num_str = malloc(num_len + 1);
+    if (!*num_str) return false;
+    strncpy(*num_str, ptr, num_len);
+    (*num_str)[num_len] = '\0';
+ 
+    // Skip spaces after number
+    ptr = end;
+    while (*ptr && isspace(*ptr)) ptr++;
+ 
+    if (!*ptr) {
+        free(*num_str);
+        return false;
+    }
+ 
+    // Copy base
+    *base_str = strdup(ptr);
+    return true;
+}

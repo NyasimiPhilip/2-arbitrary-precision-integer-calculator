@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>  // For bool type
 #include "operations.h"
 #include "base_conversion.h"
 #include "system_utils.h"
@@ -98,6 +99,66 @@ int main() {
         }
         if(strcmp(input, "clear") == 0) {
             clear_screen();
+            continue;
+        }
+        
+        // Base Conversion Section - Must be before tokenization
+        if(strncmp(input, "to_base", 7) == 0) {
+            char *num_str, *base_str;
+            if(!parse_base_conversion(input, &num_str, &base_str)) {
+                printf("Usage: to_base <number> <base>\n");
+                continue;
+            }
+            
+            ArbitraryInt *num = create_arbitrary_int(num_str);
+            int base = atoi(base_str);
+            
+            if(base < 2 || base > 36) {
+                printf("Base must be between 2 and 36\n");
+                free(num_str);
+                free(base_str);
+                free_arbitrary_int(num);
+                continue;
+            }
+            
+            char *result = to_base(num, base);
+            if(result) {
+                printf("%s\n", result);
+                free(result);
+            } else {
+                printf("Base conversion failed\n");
+            }
+            
+            free(num_str);
+            free(base_str);
+            free_arbitrary_int(num);
+            continue;
+        }
+        
+        if(strncmp(input, "from_base", 9) == 0) {
+            char *num_str, *base_str;
+            if(!parse_from_base(input, &num_str, &base_str)) {
+                printf("Usage: from_base <number> <base>\n");
+                continue;
+            }
+            
+            int base = atoi(base_str);
+            if(base < 2 || base > 36) {
+                printf("Base must be between 2 and 36\n");
+                free(num_str);
+                free(base_str);
+                continue;
+            }
+            
+            ArbitraryInt *result = from_base(num_str, base);
+            if(result) {
+                print_arbitrary_int(result);
+                printf("\n");
+                free_arbitrary_int(result);
+            }
+            
+            free(num_str);
+            free(base_str);
             continue;
         }
         
@@ -225,54 +286,6 @@ int main() {
             }
         }
         
-        // Base Conversion Section
-        // Handles both to_base and from_base commands
-        // Supports bases 2-36 using digits and letters
-        if(strcmp(first, "to_base") == 0) {
-            if(!second || !third) {
-                printf("Usage: to_base <number> <base>\n");
-                continue;
-            }
-            
-            ArbitraryInt *num = create_arbitrary_int(second);
-            int base = atoi(third);
-            if(base < 2 || base > 36) {
-                printf("Base must be between 2 and 36\n");
-                free_arbitrary_int(num);
-                continue;
-            }
-            char *result = to_base(num, base);
-            if(result) {
-                printf("Result: ");
-                printf("%s\n", result);
-                free(result);
-            }
-            free_arbitrary_int(num);
-            continue;
-        }
-        
-        // Handle from_base conversion
-        if(strcmp(first, "from_base") == 0) {
-            if(!second || !third) {
-                printf("Usage: from_base <number> <base>\n");
-                continue;
-            }
-            
-            int base = atoi(third);
-            if(base < 2 || base > 36) {
-                printf("Base must be between 2 and 36\n");
-                continue;
-            }
-            ArbitraryInt *result = from_base(second, base);
-            if(result) {
-                printf("Result: ");
-                print_arbitrary_int(result);
-                printf("\n");
-                free_arbitrary_int(result);
-            }
-            continue;
-        }
-        
         // Fraction Arithmetic Section
         // Handles operations between two fractions
         // Supports addition, subtraction, multiplication, division
@@ -356,7 +369,7 @@ int main() {
         }
         
         if(result) {
-            printf("Result: ");
+            
             print_arbitrary_int(result);
             printf("\n");
             if(remainder) {

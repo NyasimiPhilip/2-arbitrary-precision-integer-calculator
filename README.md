@@ -279,6 +279,5 @@ The calculator supports the following command formats:
 ## Limitations
 
 - Memory is limited by available system resources
-- Performance may degrade with very large numbers
 - Negative exponents are not supported
 - Logarithms return floor values only
