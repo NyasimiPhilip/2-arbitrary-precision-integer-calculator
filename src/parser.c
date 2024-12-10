@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 /**
  * @file parser.c
  * @brief Implementation of input parsing functionality

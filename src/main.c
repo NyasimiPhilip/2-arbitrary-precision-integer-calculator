@@ -19,7 +19,6 @@
 #include "system_utils.h"
 #include "parser.h"
 #include "fraction.h"
-#include "expression.h"
 
 #define MAX_INPUT 1024
 
@@ -36,14 +35,14 @@ void print_help() {
     printf("\nArbitrary Precision Calculator\n");
     printf("Available operations:\n");
     printf("  clear                Clear the screen\n");
-    printf("Basic Arithmetic:\n");
+    printf("\nBasic Arithmetic:\n");
     printf("  <num1> + <num2>      Addition\n");
     printf("  <num1> - <num2>      Subtraction\n");
     printf("  <num1> * <num2>      Multiplication\n");
     printf("  <num1> / <num2>      Division\n");
     printf("  <num1> %% <num2>     Modulo\n");
     printf("  <num1> ^ <num2>      Power\n");
-    printf("Fraction Operations:\n");
+    printf("\nFraction Operations:\n");
     printf("  <num1>/<den1> + <num2>/<den2>   Fraction addition\n");
     printf("  <num1>/<den1> - <num2>/<den2>   Fraction subtraction\n");
     printf("  <num1>/<den1> * <num2>/<den2>   Fraction multiplication\n");
@@ -72,17 +71,11 @@ void print_help() {
 int main() {
     // Initialize REPL environment
     char input[MAX_INPUT];
+    setbuf(stdout, NULL);  // Disable output buffering
+    
     printf("Welcome to Arbitrary Precision Calculator\n");
     printf("Type 'help' for available commands or 'exit' to quit\n");
     
-    // REPL Main Loop
-    // Handles input processing in the following order:
-    // 1. Special commands (exit, help, clear)
-    // 2. Base conversion commands
-    // 3. Logarithm expressions
-    // 4. Factorial operations
-    // 5. Fraction operations
-    // 6. Regular arithmetic operations
     while(1) {
         printf("> ");
         if(!fgets(input, MAX_INPUT, stdin)) break;
@@ -90,7 +83,12 @@ int main() {
         // Remove trailing newline
         input[strcspn(input, "\n")] = 0;
         
-        // Handle special commands first, before any tokenization
+        // Skip empty input
+        if(strlen(input) == 0) {
+            continue;
+        }
+        
+        // Handle special commands first
         if(strcmp(input, "exit") == 0) {
             break;
         }
@@ -108,6 +106,24 @@ int main() {
         char *op = strtok(NULL, " ");
         char *second = strtok(NULL, " ");
         
+        // Check for single number operations (factorial)
+        if(first && !op && !second && strchr(first, '!')) {
+            // Handle factorial
+            char *num_str = strtok(first, "!");
+            if(num_str) {
+                ArbitraryInt *num = create_arbitrary_int(num_str);
+                ArbitraryInt *result = factorial(num);
+                if(result) {
+                    print_arbitrary_int(result);
+                    printf("\n");
+                    free_arbitrary_int(result);
+                }
+                free_arbitrary_int(num);
+            }
+            continue;
+        }
+        
+        // Check for regular binary operations
         if(!first || !op || !second) {
             printf("Invalid input format\n");
             continue;
@@ -213,6 +229,12 @@ int main() {
         // Includes basic and advanced operations
         ArbitraryInt *a = create_arbitrary_int(first);
         ArbitraryInt *b = create_arbitrary_int(second);
+        if (!a || !b) {
+            printf("Invalid number format\n");
+            free_arbitrary_int(a);
+            free_arbitrary_int(b);
+            continue;
+        }
         ArbitraryInt *result = NULL;
         ArbitraryInt *remainder = NULL;
         
@@ -240,6 +262,7 @@ int main() {
         }
         
         if(result) {
+            printf("Result: ");
             print_arbitrary_int(result);
             printf("\n");
             if(remainder) {
@@ -249,21 +272,12 @@ int main() {
                 free_arbitrary_int(remainder);
             }
             free_arbitrary_int(result);
+        } else {
+            printf("Operation failed\n");
         }
         
         free_arbitrary_int(a);
         free_arbitrary_int(b);
-        
-        // Parse input
-        if(strchr(input, '(') || strchr(input, ')')) {
-            ArbitraryInt* result = evaluate_pemdas(input);
-            if(result) {
-                print_arbitrary_int(result);
-                printf("\n");
-                free_arbitrary_int(result);
-            }
-            continue;
-        }
     }
     
     printf("Exiting...\n");

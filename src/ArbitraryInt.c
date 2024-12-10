@@ -49,10 +49,9 @@ static char* add_absolute(const char *a, const char *b) {
     size_t len_a = strlen(a);
     size_t len_b = strlen(b);
     size_t max_len = (len_a > len_b) ? len_a : len_b;
-    char *result = calloc(max_len + 2, sizeof(char)); // +1 for possible carry, +1 for '\0'
+    char *result = calloc(max_len + 2, sizeof(char));
     if(!result) {
-        perror("Failed to allocate memory for addition");
-        exit(EXIT_FAILURE);
+        return NULL;
     }
 
     int carry = 0, sum;
@@ -77,8 +76,7 @@ ArbitraryInt* create_arbitrary_int(const char *str) {
 
     ArbitraryInt *num = malloc(sizeof(ArbitraryInt));
     if(!num) {
-        perror("Failed to allocate memory for ArbitraryInt");
-        exit(EXIT_FAILURE);
+        return NULL;
     }
 
     // Initialize
@@ -93,14 +91,13 @@ ArbitraryInt* create_arbitrary_int(const char *str) {
 
     // Validate digits
     size_t len = strlen(str);
-    if (len > INT_MAX) {
-        // Handle error case
+    if (len == 0 || len > INT_MAX) {
+        free(num);
         return NULL;
     }
-    int size = (int)len;
-    for(size_t i = 0; i < size; i++) {
+
+    for(size_t i = 0; i < len; i++) {
         if(!isdigit(str[i])) {
-            fprintf(stderr, "Invalid number: %s\n", str);
             free(num);
             return NULL;
         }
@@ -108,6 +105,10 @@ ArbitraryInt* create_arbitrary_int(const char *str) {
 
     // Remove leading zeros
     num->value = remove_leading_zeros(str);
+    if (!num->value) {
+        free(num);
+        return NULL;
+    }
 
     return num;
 }
@@ -199,10 +200,13 @@ static char* subtract_absolute(const char *a, const char *b) {
 
 // Addition function
 ArbitraryInt* add_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b) {
+    if (!a || !b || !a->value || !b->value) {
+        return NULL;
+    }
+
     ArbitraryInt *result = malloc(sizeof(ArbitraryInt));
     if(!result) {
-        perror("Failed to allocate memory for result ArbitraryInt");
-        exit(EXIT_FAILURE);
+        return NULL;
     }
 
     // Initialize
@@ -212,27 +216,26 @@ ArbitraryInt* add_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b) {
     if(a->is_negative == b->is_negative) {
         // Same sign: add absolute values
         char *sum = add_absolute(a->value, b->value);
+        if (!sum) {
+            free(result);
+            return NULL;
+        }
         result->value = sum;
         result->is_negative = a->is_negative;
-    }
-    else {
+    } else {
         // Different signs: subtract smaller absolute from larger absolute
         int cmp = compare_arbitrary_ints(a, b);
         if(cmp == 0) {
             // Result is zero
             result->value = strdup("0");
             result->is_negative = false;
-        }
-        else if(cmp > 0) {
-            // a > b
-            char *diff = subtract_absolute(a->value, b->value);
-            result->value = diff;
+        } else if(cmp > 0) {
+            // |a| > |b|
+            result->value = subtract_absolute(a->value, b->value);
             result->is_negative = a->is_negative;
-        }
-        else {
-            // b > a
-            char *diff = subtract_absolute(b->value, a->value);
-            result->value = diff;
+        } else {
+            // |b| > |a|
+            result->value = subtract_absolute(b->value, a->value);
             result->is_negative = b->is_negative;
         }
     }

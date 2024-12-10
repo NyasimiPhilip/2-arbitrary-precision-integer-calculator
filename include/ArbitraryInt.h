@@ -47,4 +47,25 @@ int compare_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
  */
 void print_arbitrary_int(const ArbitraryInt *num);
 
+// Utility Functions
+ArbitraryInt* add_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
+ArbitraryInt* subtract_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
+ArbitraryInt* multiply_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
+int compare_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
+
+/**
+ * @brief Internal function for adding arbitrary integers
+ */
+ArbitraryInt* add_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
+
+/**
+ * @brief Internal function for subtracting arbitrary integers
+ */
+ArbitraryInt* subtract_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
+
+/**
+ * @brief Internal function for multiplying arbitrary integers
+ */
+ArbitraryInt* multiply_arbitrary_ints(const ArbitraryInt *a, const ArbitraryInt *b);
+
 #endif // ARBITRARYINT_H 

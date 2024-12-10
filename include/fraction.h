@@ -47,6 +47,24 @@ void free_fraction(Fraction *frac);
  */
 Fraction* add_fractions(const Fraction *a, const Fraction *b);
 
+/**
+ * @brief Subtract two fractions
+ */
+Fraction* subtract_fractions(const Fraction *a, const Fraction *b);
 
+/**
+ * @brief Multiply two fractions
+ */
+Fraction* multiply_fractions(const Fraction *a, const Fraction *b);
+
+/**
+ * @brief Divide two fractions
+ */
+Fraction* divide_fractions(const Fraction *a, const Fraction *b);
+
+/**
+ * @brief Print a fraction
+ */
+void print_fraction(const Fraction *frac);
 
 #endif // FRACTION_H
