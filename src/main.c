@@ -184,7 +184,6 @@ int main() {
                 ArbitraryInt *num = create_arbitrary_int(num_str);
                 ArbitraryInt *result = factorial(num);
                 if(result) {
-                    printf("Result: ");
                     print_arbitrary_int(result);
                     printf("\n");
                     free_arbitrary_int(result);
@@ -207,7 +206,6 @@ int main() {
             ArbitraryInt *result = logarithm(num, base);
             
             if(result) {
-                printf("Result: ");
                 print_arbitrary_int(result);
                 printf("\n");
                 free_arbitrary_int(result);
@@ -225,70 +223,12 @@ int main() {
         char *op = strtok(NULL, " ");
         char *second = strtok(NULL, " ");
         
-        // Check for second operator for PEMDAS
-        char *third = strtok(NULL, " ");
-        char *fourth = strtok(NULL, " ");
-        
         if(!first || !op || !second) {
             printf("Invalid input format\n");
             continue;
         }
         
-        // Handle PEMDAS
-        if(third && fourth) {
-            // If second operator has higher precedence
-            if((*op == '+' || *op == '-') && (*third == '*' || *third == '/' || *third == '^')) {
-                // Evaluate second operation first
-                ArbitraryInt *b = create_arbitrary_int(second);
-                ArbitraryInt *c = create_arbitrary_int(fourth);
-                ArbitraryInt *temp_result = NULL;
-                
-                switch(*third) {
-                    case '*':
-                        temp_result = multiply(b, c);
-                        break;
-                    case '/':
-                        temp_result = divide(b, c, NULL);
-                        break;
-                    case '^':
-                        temp_result = power(b, c);
-                        break;
-                }
-                
-                if(temp_result) {
-                    // Now evaluate first operation
-                    ArbitraryInt *a = create_arbitrary_int(first);
-                    ArbitraryInt *final_result = NULL;
-                    
-                    switch(*op) {
-                        case '+':
-                            final_result = add(a, temp_result);
-                            break;
-                        case '-':
-                            final_result = subtract(a, temp_result);
-                            break;
-                    }
-                    
-                    if(final_result) {
-                        printf("Result: ");
-                        print_arbitrary_int(final_result);
-                        printf("\n");
-                        free_arbitrary_int(final_result);
-                    }
-                    
-                    free_arbitrary_int(a);
-                    free_arbitrary_int(temp_result);
-                }
-                
-                free_arbitrary_int(b);
-                free_arbitrary_int(c);
-                continue;
-            }
-        }
-        
         // Fraction Arithmetic Section
-        // Handles operations between two fractions
-        // Supports addition, subtraction, multiplication, division
         if(strchr(first, '/') && strchr(second, '/')) {
             Fraction *f1 = parse_fraction(first);
             Fraction *f2 = parse_fraction(second);

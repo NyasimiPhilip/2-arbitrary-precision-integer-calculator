@@ -11,14 +11,7 @@ The calculator uses a string-based representation for arbitrary precision intege
 3. **Basic Operations**: Implements arithmetic algorithms for basic operations
 4. **Advanced Operations**: Includes power, factorial, and logarithm calculations
 5. **Fraction Operations**: Handles rational numbers with automatic simplification
-6. **Expression Evaluation**: Supports complex expressions with PEMDAS/BODMAS order of operations
 
-## Order of Operations (PEMDAS/BODMAS)
-The calculator follows standard mathematical order of operations:
-1. **P**arentheses/Brackets
-2. **E**xponents/**O**rders (powers)
-3. **M**ultiplication and **D**ivision (left to right)
-4. **A**ddition and **S**ubtraction (left to right)
 
 ## Building the Project
 
@@ -40,7 +33,7 @@ cmake ..
 # Build the project
 cmake --build . --config Release
 
-# Run tests from the build directory
+# Run tests from within the build directory
 ctest -C Release -V
 ```
 
@@ -56,8 +49,8 @@ cmake ..
 # Build with configuration
 cmake --build . --config Release
 
-# Run tests with configuration
-ctest -C Release
+# Run tests from within the build directory
+ctest -C Release -V
 ```
 
 ### Option 2: Manual Compilation
@@ -166,17 +159,6 @@ gcc build.c -o build
 Remainder: 1
 ```
 
-### Complex Expressions
-```bash
-> 2 + 3 * 4
-14
-> (2 + 3) * 4
-20
-> 2 ^ 3 + 4
-12
-> (5 + 3) * (2 + 1)
-24
-```
 
 ### Fraction Arithmetic
 ```bash
@@ -215,12 +197,6 @@ FF
 - Numbers are stored as strings of digits
 - Sign is stored separately as a boolean
 - Leading zeros are automatically removed
-
-### Expression Evaluation
-- Tokenizes input into numbers, operators, and parentheses
-- Implements Shunting Yard algorithm for operator precedence
-- Supports nested parentheses for complex grouping
-- Handles operator precedence according to PEMDAS/BODMAS rules
 
 ### Fraction Implementation
 - Fractions are stored as pairs of ArbitraryInts (numerator/denominator)

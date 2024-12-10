@@ -29,4 +29,4 @@ target_link_libraries(calculator calculator_lib)
 
 # Enable testing
 enable_testing()
-add_subdirectory(tests) 
+add_subdirectory(tests)
