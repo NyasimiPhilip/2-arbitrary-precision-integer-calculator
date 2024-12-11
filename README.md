@@ -16,13 +16,41 @@ The calculator uses a string-based representation for arbitrary precision intege
 ## Building the Project
 
 ### Prerequisites
-- CMake 3.10 or higher (for CMake build)
 - C compiler (GCC/MinGW for Windows, GCC/Clang for Unix)
+- CMake 3.10 or higher (optional)
 - Standard C library
 
-### Option 1: Using CMake
+### Building with build.c (Recommended)
 
-#### Unix/Linux/Mac:
+The project includes a build script that automatically detects your build environment and chooses the appropriate build method. To use it:
+
+```bash
+# Compile the build script
+gcc build.c -o build
+
+# Run the build script
+./build      # on Unix/Linux/Mac
+./build.exe  # on Windows
+```
+
+The build script will:
+1. Check if CMake is available on your system
+2. If CMake is found:
+   - Create a build directory
+   - Generate build files using CMake
+   - Build the project using CMake
+3. If CMake is not found:
+   - Fall back to direct GCC compilation
+   - Compile all source files
+   - Create the static library
+   - Link the final executable
+4. Run the calculator after successful build
+
+### Manual Build Options
+
+If you prefer to build manually, you can use either of these methods:
+
+#### Option 1: Using CMake (if available)
 ```bash
 # Create build directory
 mkdir build && cd build
@@ -37,84 +65,27 @@ cmake --build . --config Release
 ctest -C Release -V
 ```
 
-#### Windows (PowerShell):
-```powershell
-# Create and enter build directory
-mkdir build
-cd build
-
-# Generate build files
-cmake ..
-
-# Build with configuration
-cmake --build . --config Release
-
-# Run tests from within the build directory
-ctest -C Release -V
-```
-
-### Option 2: Manual Compilation
-
-#### Unix/Linux/Mac:
+#### Option 2: Direct GCC Compilation
 ```bash
-# Compile library
-gcc -c src/*.c -I./include
+#1 Create build directory
+mkdir -p build/Release
 
-# Create static library
-ar rcs libcalculator.a *.o
+#2 Compile source files individually
+gcc -c src/ArbitraryInt.c -I./include -o build/ArbitraryInt.o
+gcc -c src/base_conversion.c -I./include -o build/base_conversion.o
+gcc -c src/operations.c -I./include -o build/operations.o
+gcc -c src/parser.c -I./include -o build/parser.o
+gcc -c src/system_utils.c -I./include -o build/system_utils.o
+gcc -c src/fraction.c -I./include -o build/fraction.o
 
-# Compile and link main program
-gcc src/main.c -L. -lcalculator -I./include -o calculator
+# 3. Create the static library
+ar rcs build/Release/libcalculator.a build/ArbitraryInt.o build/base_conversion.o build/operations.o build/parser.o build/system_utils.o build/fraction.o
 
-# Compile tests
-gcc tests/test_arbitraryint.c -L. -lcalculator -I./include -o test_arbitraryint
-gcc tests/test_base_conversion.c -L. -lcalculator -I./include -o test_base_conversion
-gcc tests/test_operations.c -L. -lcalculator -I./include -o test_operations
+# 4. Compile and link main program
+gcc src/main.c -L./build/Release -lcalculator -I./include -o build/Release/calculator
 
-# Run tests
-./test_arbitraryint
-./test_base_conversion
-./test_operations
-```
-
-#### Windows :
-```powershell
-# Compile library
-gcc -c src/*.c -I./include
-
-# Create static library
-ar rcs libcalculator.a *.o
-
-# Compile and link main program
-gcc src/main.c -L. -lcalculator -I./include -o calculator.exe
-
-# Compile tests
-gcc tests/test_arbitraryint.c -L. -lcalculator -I./include -o test_arbitraryint.exe
-gcc tests/test_base_conversion.c -L. -lcalculator -I./include -o test_base_conversion.exe
-gcc tests/test_fraction.c -L. -lcalculator -I./include -o test_fraction.exe
-gcc tests/test_operations.c -L. -lcalculator -I./include -o test_operations.exe
-
-# Run tests
-./test_arbitraryint.exe
-./test_base_conversion.exe
-./test_fraction.exe
-./test_operations.exe
-```
-
-### Option 3:Use the provided build.c file in the root of the project
-```bash
-#Compile the program
-gcc build.c -o build
-```
-#### Unix/Linux/Mac:
-```bash
-#Compile the program
-./build
-```
-
-#### Windows (MinGW):
-```bash
-./build.exe
+# 5. Navigate to the build directory
+cd build/Release
 ```
 
 ### Running the Calculator
