@@ -62,8 +62,8 @@ cmake ..
 # Build the project
 cmake --build . --config Release
 
-# Run tests from within the build directory
-ctest -C Release -V
+# Navigate to the Release directory
+cd Release
 ```
 
 #### Option 2: Direct GCC Compilation
@@ -201,7 +201,8 @@ The project includes comprehensive test suites for:
 # From the project root directory:
 
 # Create and enter build directory
-mkdir build && cd build
+mkdir build
+cd build
 
 # Generate build files
 cmake ..
@@ -212,9 +213,6 @@ cmake --build . --config Release
 # Run all tests (from within the build directory)
 ctest -C Release -V
 
-# Or return to root and run tests
-cd ..
-cd build && ctest -C Release -V
 ```
 
 #### Manual Test Compilation
@@ -225,7 +223,7 @@ cd build && ctest -C Release -V
 # (Skip if you've already built it)
 mkdir -p build/Release
 gcc -c src/*.c -I./include -o build/*.o
-ar rcs build/Release/libcalculator.a build/*.o
+ar rcs build/Release/libcalculator.a build/ArbitraryInt.o build/base_conversion.o build/operations.o build/parser.o build/system_utils.o build/fraction.o
 
 # Create test build directory
 mkdir -p build/tests
@@ -249,10 +247,9 @@ cd build/tests
 ```
 
 Note: 
-1. All commands should be run from the project root directory unless otherwise specified
-2. Make sure you've built the calculator library first before attempting to build tests
-3. The CMake method will automatically handle library dependencies
-4. For manual compilation, you need to build the library before building tests
+1. Make sure you've built the calculator library first before attempting to build tests
+2. The CMake method will automatically handle library dependencies
+3. For manual compilation, you need to build the library before building tests
 
 ## Interactive Commands
 
