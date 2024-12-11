@@ -193,10 +193,47 @@ The project includes comprehensive test suites for:
 - Edge cases (very large numbers, zero, negative numbers)
 - Error conditions
 
-Run the test suite:
+### Building and Running Tests
+
+#### Using CMake (Recommended)
+```bash
+# Create and enter build directory
+mkdir build && cd build
+
+# Generate build files
+cmake ..
+
+# Build all tests
+cmake --build . --config Release
+
+# Run all tests
+ctest -C Release -V
+```
+
+#### Manual Test Compilation
+```bash
+# Create test build directory
+mkdir -p build/tests
+
+# Compile test files
+gcc tests/test_arbitraryint.c -I./include -L./build/Release -lcalculator -o build/tests/test_arbitraryint
+gcc tests/test_base_conversion.c -I./include -L./build/Release -lcalculator -o build/tests/test_base_conversion
+gcc tests/test_operations.c -I./include -L./build/Release -lcalculator -o build/tests/test_operations
+gcc tests/test_fraction.c -I./include -L./build/Release -lcalculator -o build/tests/test_fraction
+gcc tests/test_parser.c -I./include -L./build/Release -lcalculator -o build/tests/test_parser
+gcc tests/test_main.c -I./include -L./build/Release -lcalculator -o build/tests/test_main
+
+# Run individual tests
+cd build/tests
 ./test_arbitraryint
 ./test_base_conversion
 ./test_operations
+./test_fraction
+./test_parser
+./test_main
+```
+
+Note: Make sure you've built the calculator library first using either the build script or manual compilation steps before attempting to build and run the tests.
 
 ## Interactive Commands
 
