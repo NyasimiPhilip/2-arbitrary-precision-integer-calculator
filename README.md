@@ -101,20 +101,7 @@ gcc tests/test_operations.c -L. -lcalculator -I./include -o test_operations.exe
 ./test_operations.exe
 ```
 
-### Option 3: Using Make
-
-#### Unix/Linux/Mac:
-```bash
-# Build everything
-make
-
-# Run tests
-make test
-
-# Clean build files
-make clean
-```
-### Option 4:Use the provided build.c file in the root of the project
+### Option 3:Use the provided build.c file in the root of the project
 ```bash
 #Compile the program
 gcc build.c -o build
