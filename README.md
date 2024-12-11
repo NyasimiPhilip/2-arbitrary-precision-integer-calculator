@@ -53,7 +53,8 @@ If you prefer to build manually, you can use either of these methods:
 #### Option 1: Using CMake (if available)
 ```bash
 # Create build directory
-mkdir build && cd build
+mkdir build
+cd build
 
 # Generate build files
 cmake ..
