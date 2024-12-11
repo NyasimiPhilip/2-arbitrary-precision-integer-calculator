@@ -197,6 +197,8 @@ The project includes comprehensive test suites for:
 
 #### Using CMake (Recommended)
 ```bash
+# From the project root directory:
+
 # Create and enter build directory
 mkdir build && cd build
 
@@ -206,12 +208,24 @@ cmake ..
 # Build all tests
 cmake --build . --config Release
 
-# Run all tests
+# Run all tests (from within the build directory)
 ctest -C Release -V
+
+# Or return to root and run tests
+cd ..
+cd build && ctest -C Release -V
 ```
 
 #### Manual Test Compilation
 ```bash
+# From the project root directory:
+
+# First ensure the calculator library is built
+# (Skip if you've already built it)
+mkdir -p build/Release
+gcc -c src/*.c -I./include -o build/*.o
+ar rcs build/Release/libcalculator.a build/*.o
+
 # Create test build directory
 mkdir -p build/tests
 
@@ -223,7 +237,7 @@ gcc tests/test_fraction.c -I./include -L./build/Release -lcalculator -o build/te
 gcc tests/test_parser.c -I./include -L./build/Release -lcalculator -o build/tests/test_parser
 gcc tests/test_main.c -I./include -L./build/Release -lcalculator -o build/tests/test_main
 
-# Run individual tests
+# Run individual tests (from the tests directory)
 cd build/tests
 ./test_arbitraryint
 ./test_base_conversion
@@ -233,7 +247,11 @@ cd build/tests
 ./test_main
 ```
 
-Note: Make sure you've built the calculator library first using either the build script or manual compilation steps before attempting to build and run the tests.
+Note: 
+1. All commands should be run from the project root directory unless otherwise specified
+2. Make sure you've built the calculator library first before attempting to build tests
+3. The CMake method will automatically handle library dependencies
+4. For manual compilation, you need to build the library before building tests
 
 ## Interactive Commands
 
