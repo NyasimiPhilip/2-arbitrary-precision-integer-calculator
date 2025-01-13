@@ -23,13 +23,18 @@ bool check_cmake() {
 int build_with_gcc() {
     printf("Building with gcc (CMake not found)...\n");
 
-    // 1. Create build directory
+    // 1. Create build directory - First remove any existing build file/directory
 #ifdef _WIN32
-    system("mkdir build 2> NUL");
-    system("mkdir build\\Release 2> NUL");
+    system("if exist build rmdir /s /q build 2> NUL");
+    if (system("mkdir build") != 0 ||
+        system("mkdir build\\Release") != 0) {
 #else
-    system("mkdir -p build/Release");
+    system("rm -rf build");  // Remove existing build file/directory
+    if (system("mkdir -p build/Release") != 0) {
 #endif
+        fprintf(stderr, "Error: Failed to create build directories\n");
+        return 1;
+    }
 
     // 2. Compile source files individually
     const char *compile_cmds[] = {

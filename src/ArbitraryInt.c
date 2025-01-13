@@ -11,6 +11,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
+
+// Add cross-platform string duplication
+static char* duplicate_string(const char *str) {
+#ifdef _WIN32
+    return _strdup(str);
+#else
+    return strdup(str);
+#endif
+}
 
 /**
  * @brief Removes leading zeros from a number string
@@ -21,7 +31,7 @@ static char* remove_leading_zeros(const char *str) {
     while(*str == '0' && *(str+1) != '\0') {
         str++;
     }
-    return _strdup(str);
+    return duplicate_string(str);
 }
 
 /**
