@@ -10,4 +10,7 @@ char* to_base(const ArbitraryInt *num, int base);
 // Converts a string in the specified base to ArbitraryInt
 ArbitraryInt* from_base(const char *str, int base);
 
+// Helper function to convert a single character to its numerical value
+int char_to_value(char c);
+
 #endif // BASE_CONVERSION_H

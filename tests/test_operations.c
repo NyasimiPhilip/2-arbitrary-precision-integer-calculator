@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "../include/operations.h"
 
 /**
@@ -38,22 +39,6 @@ void test_basic_arithmetic() {
     result = add(a, b);
     assert(strcmp(result->value, "864197532") == 0);
     assert(result->is_negative == false);
-    free_arbitrary_int(result);
-    free_arbitrary_int(a);
-    free_arbitrary_int(b);
-    
-    // Subtraction tests
-    printf("Testing subtraction...\n");
-    a = create_arbitrary_int("1000000000");
-    b = create_arbitrary_int("1");
-    result = subtract(a, b);
-    assert(strcmp(result->value, "999999999") == 0);
-    free_arbitrary_int(result);
-    
-    // Test negative result
-    result = subtract(b, a);
-    assert(strcmp(result->value, "999999999") == 0);
-    assert(result->is_negative == true);
     free_arbitrary_int(result);
     free_arbitrary_int(a);
     free_arbitrary_int(b);

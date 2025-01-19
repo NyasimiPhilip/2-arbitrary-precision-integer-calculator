@@ -21,11 +21,25 @@ static const char digits_map[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
  * @param c Character to convert
  * @return Numerical value (0-35) or -1 if invalid
  */
-static int char_to_value(char c) {
-    if(c >= '0' && c <= '9') return c - '0';
-    if(c >= 'A' && c <= 'Z') return 10 + (c - 'A');
-    if(c >= 'a' && c <= 'z') return 10 + (c - 'a');
-    return -1; // Invalid character
+int char_to_value(char c) {
+    int val = -1;
+    
+    // Handle decimal digits
+    if (c >= '0' && c <= '9') {
+        val = c - '0';
+    }
+    // Handle uppercase hex digits
+    else if (c >= 'A' && c <= 'F') {
+        val = 10 + (c - 'A');
+    }
+    // Handle lowercase hex digits
+    else if (c >= 'a' && c <= 'f') {
+        val = 10 + (c - 'a');
+    }
+    
+    // Debug output
+    printf("Converting '%c' to value: %d\n", c, val);
+    return val;
 }
 
 /**
@@ -94,58 +108,91 @@ char* to_base(const ArbitraryInt *num, int base) {
  * @return Decimal ArbitraryInt* or NULL on error
  */
 ArbitraryInt* from_base(const char *str, int base) {
-    if(base < 2 || base > 36) {
-        fprintf(stderr, "Base must be between 2 and 36.\n");
+    printf("Converting string '%s' from base %d\n", str, base);
+    
+    if (!str || base < 2 || base > 36) {
+        printf("Invalid input: str=%p, base=%d\n", (void*)str, base);
         return NULL;
     }
 
-    // Add input validation
-    if (!str || strlen(str) == 0) {
-        fprintf(stderr, "Invalid empty input\n");
+    // Handle empty string
+    if (strlen(str) == 0) {
+        printf("Empty string input\n");
         return NULL;
     }
 
+    // Handle negative numbers
     bool is_negative = false;
-    size_t start = 0;
-    if(str[0] == '-') {
+    if (str[0] == '-') {
         is_negative = true;
-        start = 1;
+        str++;  // Skip the minus sign
+        printf("Negative number detected, processing: %s\n", str);
     }
 
-    // Create base number correctly
+    // Create result starting at 0
+    ArbitraryInt *result = create_arbitrary_int("0");
+    if (!result) {
+        printf("Failed to create initial result\n");
+        return NULL;
+    }
+
+    // Create base number for multiplication
     char base_str[20];
     sprintf(base_str, "%d", base);
     ArbitraryInt *base_num = create_arbitrary_int(base_str);
-    ArbitraryInt *result = create_arbitrary_int("0");
+    if (!base_num) {
+        printf("Failed to create base number\n");
+        free_arbitrary_int(result);
+        return NULL;
+    }
 
     // Process each digit
-    for(size_t i = start; i < strlen(str); i++) {
-        int val = char_to_value(str[i]);
-        if(val < 0 || val >= base) {
-            fprintf(stderr, "Invalid character '%c' for base %d\n", str[i], base);
+    for (const char *p = str; *p; p++) {
+        printf("Processing digit: '%c'\n", *p);
+        
+        // Convert character to value
+        int val = char_to_value(*p);
+        if (val < 0 || val >= base) {
+            printf("Invalid digit '%c' for base %d (val=%d)\n", *p, base, val);
             free_arbitrary_int(result);
             free_arbitrary_int(base_num);
             return NULL;
         }
 
         // result = result * base + val
-        ArbitraryInt *mult = multiply(result, base_num);
-        char val_str[2] = {0};
-        sprintf(val_str, "%d", val);
-        ArbitraryInt *val_ai = create_arbitrary_int(val_str);
-        ArbitraryInt *new_result = add(mult, val_ai);
+        ArbitraryInt *temp = multiply(result, base_num);
+        if (!temp) {
+            free_arbitrary_int(result);
+            free_arbitrary_int(base_num);
+            return NULL;
+        }
 
+        // Convert val to ArbitraryInt
+        char val_str[20];
+        sprintf(val_str, "%d", val);
+        ArbitraryInt *val_num = create_arbitrary_int(val_str);
+        if (!val_num) {
+            free_arbitrary_int(temp);
+            free_arbitrary_int(base_num);
+            free_arbitrary_int(result);
+            return NULL;
+        }
+
+        // Add the value
+        ArbitraryInt *new_result = add(temp, val_num);
+        free_arbitrary_int(temp);
+        free_arbitrary_int(val_num);
         free_arbitrary_int(result);
-        free_arbitrary_int(mult);
-        free_arbitrary_int(val_ai);
+        
+        if (!new_result) {
+            free_arbitrary_int(base_num);
+            return NULL;
+        }
+        
         result = new_result;
     }
 
     free_arbitrary_int(base_num);
-
-    if(is_negative) {
-        result->is_negative = true;
-    }
-
+    result->is_negative = is_negative;
     return result;
 }
